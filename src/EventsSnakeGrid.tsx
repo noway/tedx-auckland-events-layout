@@ -33,6 +33,10 @@ function createGrid(rows: number, cols: number) {
   return grid;
 }
 
+function invertDirection(dir: Direction) {
+  return dir === "right" ? "left" : "right";
+}
+
 export default function EventsSnakeGrid({ items, lineColor }: Props) {
   // derived constants
   const GRID_STEP = GRID_CELL_SIDE + GRID_GAP;
@@ -47,14 +51,6 @@ export default function EventsSnakeGrid({ items, lineColor }: Props) {
   let column = 0;
   let direction: Direction = "right";
   let snake: SnakeDirection[] = [];
-
-  function invertDirection(dir: Direction) {
-    if (dir === "right") {
-      return "left";
-    } else {
-      return "right";
-    }
-  }
 
   // TODO: make this a pure function
   function findEmptyCell(): void {
