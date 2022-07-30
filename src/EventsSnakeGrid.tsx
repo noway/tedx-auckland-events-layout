@@ -240,7 +240,7 @@ export default function EventsSnakeGrid({ items, lineColor }: Props) {
             <div
               className={[
                 "events__item",
-                ...[item.isBig ? "events__item--big" : ""],
+                ...(item.isBig ? ["events__item--big"] : []),
               ].join(" ")}
               key={i}
               style={{
