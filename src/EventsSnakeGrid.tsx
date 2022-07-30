@@ -22,23 +22,26 @@ const MAX_COLS = 4;
 const GRID_GAP = 25;
 const GRID_CELL_SIDE = 100;
 
+function createGrid(rows: number, cols: number) {
+  const grid: Cell[][] = [];
+  for (let i = 0; i < rows; i++) {
+    grid.push([]);
+    for (let j = 0; j < cols; j++) {
+      grid[grid.length - 1].push(null);
+    }
+  }
+  return grid;
+}
+
 export default function EventsSnakeGrid({ items, lineColor }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // mutable variables
-  let grid: Cell[][] = [[]];
+  let grid: Cell[][] = createGrid(MAX_ROWS, MAX_COLS);
   let row = 0;
   let column = 0;
   let direction: Direction = "right";
   let snake: SnakeDirection[] = [];
-
-  // create grid
-  for (let i = 0; i < MAX_ROWS; i++) {
-    for (let j = 0; j < MAX_COLS; j++) {
-      grid[grid.length - 1].push(null);
-    }
-    if (i !== MAX_ROWS - 1) grid.push([]);
-  }
 
   function invertDirection(dir: Direction) {
     if (dir === "right") {
