@@ -144,7 +144,9 @@ export default function EventsSnakeGrid({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // mutable variables
-  let grid: Cell[][] = Array(2).fill(undefined).map(() => Array(columns).fill(null))
+  let grid: Cell[][] = Array(2)
+    .fill(undefined)
+    .map(() => Array(columns).fill(null));
   let snakeProgress: SnakeProgress = {
     row: 0,
     column: 0,
