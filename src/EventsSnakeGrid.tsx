@@ -44,18 +44,14 @@ export default function EventsSnakeGrid({
   gap = 25,
 }: Props) {
   // derived constants
-  const MAX_COLS = columns;
-  const GRID_GAP = gap;
-  const GRID_CELL_SIDE = cellSize;
-
-  const GRID_STEP = GRID_CELL_SIDE + GRID_GAP;
-  const GRID_HALF_CELL = GRID_CELL_SIDE / 2;
+  const GRID_STEP = cellSize + gap;
+  const GRID_HALF_CELL = cellSize / 2;
 
   // constants
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // mutable variables
-  let grid: Cell[][] = createGrid(MAX_ROWS, MAX_COLS);
+  let grid: Cell[][] = createGrid(MAX_ROWS, columns);
   let row = 0;
   let column = 0;
   let direction: Direction = "right";
@@ -71,10 +67,10 @@ export default function EventsSnakeGrid({
     if (nextDirection === "right") {
       nextColumn++;
       nextSnake.push("right");
-      if (nextColumn > MAX_COLS - 1) {
+      if (nextColumn > columns - 1) {
         nextRow++;
         nextSnake.push("down");
-        nextColumn = MAX_COLS - 1;
+        nextColumn = columns - 1;
         nextDirection = invertDirection(nextDirection);
       }
     } else {
@@ -98,7 +94,7 @@ export default function EventsSnakeGrid({
       return findEmptyCell();
     }
     // don't stop on edges coming from left to right
-    if (nextColumn === MAX_COLS - 1 && nextDirection === "right") {
+    if (nextColumn === columns - 1 && nextDirection === "right") {
       // committing the step
       column = nextColumn;
       row = nextRow;
@@ -130,7 +126,7 @@ export default function EventsSnakeGrid({
   for (const item of items) {
     if (item.isBig) {
       if (direction === "right") {
-        if (column + 1 < MAX_COLS) {
+        if (column + 1 < columns) {
           grid[row][column] = item.id;
           grid[row][column + 1] = item.id;
           grid[row + 1][column] = item.id;
@@ -179,12 +175,12 @@ export default function EventsSnakeGrid({
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
-    let curPos: [number, number] = [GRID_CELL_SIDE / 2, GRID_CELL_SIDE / 2];
+    let curPos: [number, number] = [cellSize / 2, cellSize / 2];
 
     function clamp(num: number) {
       // 1 grid gap here because each step includes a gap, we just need to remove the last gap
       return Math.max(
-        Math.min(num, GRID_STEP * MAX_COLS - GRID_CELL_SIDE / 2 - GRID_GAP),
+        Math.min(num, GRID_STEP * columns - cellSize / 2 - gap),
         GRID_HALF_CELL
       );
     }
@@ -223,8 +219,8 @@ export default function EventsSnakeGrid({
         ref={canvasRef}
         // just like above, subtract 1 grid gap because each step includes a gap,
         // we just need to remove the last gap
-        width={GRID_STEP * MAX_COLS - GRID_GAP}
-        height={GRID_STEP * MAX_ROWS - GRID_GAP}
+        width={GRID_STEP * columns - gap}
+        height={GRID_STEP * MAX_ROWS - gap}
         style={{
           position: "absolute",
           zIndex: -1,
@@ -235,9 +231,9 @@ export default function EventsSnakeGrid({
         style={{
           display: "grid",
           gridTemplateAreas: areas,
-          gridAutoColumns: GRID_CELL_SIDE,
-          gridAutoRows: GRID_CELL_SIDE,
-          gap: GRID_GAP,
+          gridAutoColumns: cellSize,
+          gridAutoRows: cellSize,
+          gap: gap,
         }}
       >
         {items.map((item, i) => {
