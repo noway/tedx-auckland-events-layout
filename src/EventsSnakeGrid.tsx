@@ -16,11 +16,14 @@ interface Props {
 }
 
 const MAX_ROWS = 9; // TODO: dynamic
+// TODO: this and below as defaultProps?
 const MAX_COLS = 4;
 const GRID_GAP = 25;
 const GRID_CELL_SIDE = 100;
 
 export default function EventsSnakeGrid({ items }: Props) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
   // mutable variables
   let grid: Cell[][] = [[]];
   let row = 0;
@@ -44,6 +47,7 @@ export default function EventsSnakeGrid({ items }: Props) {
     }
   }
 
+  // TODO: make this a pure function
   function findEmptyCell(): void {
     // calculating next step
     let nextColumn = column;
@@ -158,7 +162,6 @@ export default function EventsSnakeGrid({ items }: Props) {
     })
     .join(" ");
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current!;
