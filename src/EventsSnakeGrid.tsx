@@ -132,9 +132,9 @@ function fillBigItem(
 ): SnakeProgress {
   const directionSign = snakeProgress.direction === "right" ? 1 : -1;
   grid[snakeProgress.row][snakeProgress.column] = item.id;
-  grid[snakeProgress.row][snakeProgress.column + 1 * directionSign] = item.id;
+  grid[snakeProgress.row][snakeProgress.column + directionSign] = item.id;
   grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
-  grid[snakeProgress.row + 1][snakeProgress.column + 1 * directionSign] =
+  grid[snakeProgress.row + 1][snakeProgress.column + directionSign] =
     item.id;
   return {
     ...snakeProgress,
