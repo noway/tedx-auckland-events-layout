@@ -206,10 +206,17 @@ export default function App() {
 
   return (
     <>
-      {/* TODO: dynamic */}
-      <canvas ref={canvasRef} width={500} height={1000} />
+      <canvas
+        ref={canvasRef}
+        // TODO: dynamic
+        width={500}
+        height={1000}
+        style={{
+          position: "absolute",
+          zIndex: -1,
+        }}
+      />
       <div
-        className="events-grid"
         style={{
           gridAutoRows: cell,
           gridAutoColumns: cell,
