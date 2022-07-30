@@ -7,13 +7,13 @@ interface Item {
   isBig: boolean;
 }
 
-type Cell = number | null
+type Cell = number | null;
 type Direction = "right" | "left";
-type SnakeDirection = Direction | "down"
+type SnakeDirection = Direction | "down";
 
 interface Props {
-  items: Item[]
-  lineColor: string
+  items: Item[];
+  lineColor: string;
 }
 
 const MAX_ROWS = 9; // TODO: dynamic
@@ -173,7 +173,10 @@ export default function EventsSnakeGrid({ items, lineColor }: Props) {
 
     function clamp(num: number) {
       // 1 grid gap here because each step includes a gap, we just need to remove the last gap
-      return Math.max(Math.min(num, step * MAX_COLS - GRID_CELL_SIDE / 2 - GRID_GAP), halfCell);
+      return Math.max(
+        Math.min(num, step * MAX_COLS - GRID_CELL_SIDE / 2 - GRID_GAP),
+        halfCell
+      );
     }
 
     ctx.beginPath();
@@ -230,7 +233,10 @@ export default function EventsSnakeGrid({ items, lineColor }: Props) {
         {items.map((item, i) => {
           return (
             <div
-              className={["events__item", ...[item.isBig ? "events__item--big" : ""]].join(" ")}
+              className={[
+                "events__item",
+                ...[item.isBig ? "events__item--big" : ""],
+              ].join(" ")}
               key={i}
               style={{
                 gridArea: `item-${item.id}`,
