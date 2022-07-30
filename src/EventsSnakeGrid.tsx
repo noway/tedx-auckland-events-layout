@@ -14,13 +14,12 @@ type SnakeDirection = Direction | "down";
 interface Props {
   items: Item[];
   lineColor: string;
+  cellSize?: number;
+  columns?: number;
+  gap?: number;
 }
 
 const MAX_ROWS = 9; // TODO: dynamic
-// TODO: this and below as defaultProps?
-const MAX_COLS = 4;
-const GRID_GAP = 25;
-const GRID_CELL_SIDE = 100;
 
 function createGrid(rows: number, cols: number) {
   const grid: Cell[][] = [];
@@ -37,8 +36,18 @@ function invertDirection(dir: Direction) {
   return dir === "right" ? "left" : "right";
 }
 
-export default function EventsSnakeGrid({ items, lineColor }: Props) {
+export default function EventsSnakeGrid({
+  items,
+  lineColor,
+  cellSize = 100,
+  columns = 4,
+  gap = 25,
+}: Props) {
   // derived constants
+  const MAX_COLS = columns;
+  const GRID_GAP = gap;
+  const GRID_CELL_SIDE = cellSize;
+
   const GRID_STEP = GRID_CELL_SIDE + GRID_GAP;
   const GRID_HALF_CELL = GRID_CELL_SIDE / 2;
 
