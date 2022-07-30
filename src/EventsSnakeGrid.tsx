@@ -58,12 +58,15 @@ export default function EventsSnakeGrid({
   let snake: SnakeDirection[] = [];
 
   // TODO: make this a pure function
+  // TODO: non-recursive implementation
   function findEmptyCell(): void {
     // calculating next step
     let nextColumn = column;
     let nextRow = row;
     let nextDirection = direction;
     let nextSnake: SnakeDirection[] = [];
+
+    // snake goes forward
     if (nextDirection === "right") {
       nextColumn++;
       nextSnake.push("right");
@@ -93,6 +96,7 @@ export default function EventsSnakeGrid({
       snake.push(...nextSnake);
       return findEmptyCell();
     }
+
     // don't stop on edges coming from left to right
     if (nextColumn === columns - 1 && nextDirection === "right") {
       // committing the step
@@ -103,24 +107,23 @@ export default function EventsSnakeGrid({
       return findEmptyCell();
     }
 
-    if (grid[nextRow][nextColumn] === null) {
-      // committing the step
-      column = nextColumn;
-      row = nextRow;
-      direction = nextDirection;
-      snake.push(...nextSnake);
-      return;
-    } else {
+    // if there's a barrier, go down and keep looking
+    if (grid[nextRow][nextColumn] !== null) {
       // going down
       row++;
       snake.push("down");
-      if (grid[row][column] === null) {
-        return;
+      if (grid[row][column] !== null) {
+        return findEmptyCell();
       } else {
-        // TODO: non-recursive implementation
-        findEmptyCell();
+        return
       }
     }
+
+    // committing the step
+    column = nextColumn;
+    row = nextRow;
+    direction = nextDirection;
+    snake.push(...nextSnake);
   }
 
   for (const item of items) {
