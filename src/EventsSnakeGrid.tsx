@@ -7,6 +7,13 @@ interface Item {
   isBig: boolean;
 }
 
+interface SnakeProgress {
+  column: number;
+  row: number;
+  direction: Direction;
+  history: SnakeDirection[];
+}
+
 type Cell = number | null;
 type Direction = "right" | "left";
 type SnakeDirection = Direction | "down";
@@ -59,71 +66,81 @@ export default function EventsSnakeGrid({
 
   // TODO: make this a pure function
   // TODO: non-recursive implementation
-  function findEmptyCell(): void {
-    // calculating next step
-    let nextColumn = column;
-    let nextRow = row;
-    let nextDirection = direction;
-    let nextSnake: SnakeDirection[] = [];
+  function findEmptyCell(): SnakeProgress {
+    do {
+      // calculating next step
+      let nextColumn = column;
+      let nextRow = row;
+      let nextDirection = direction;
+      let nextSnake: SnakeDirection[] = [];
 
-    // snake goes forward
-    if (nextDirection === "right") {
-      nextColumn++;
-      nextSnake.push("right");
-      if (nextColumn > columns - 1) {
-        nextRow++;
-        nextSnake.push("down");
-        nextColumn = columns - 1;
-        nextDirection = invertDirection(nextDirection);
-      }
-    } else {
-      nextColumn--;
-      nextSnake.push("left");
-      if (nextColumn < 0) {
-        nextRow++;
-        nextSnake.push("down");
-        nextColumn = 0;
-        nextDirection = invertDirection(nextDirection);
-      }
-    }
-
-    // don't stop on edges coming from right to left
-    if (nextColumn === 0 && nextDirection === "left") {
-      // committing the step
-      column = nextColumn;
-      row = nextRow;
-      direction = nextDirection;
-      snake.push(...nextSnake);
-      return findEmptyCell();
-    }
-
-    // don't stop on edges coming from left to right
-    if (nextColumn === columns - 1 && nextDirection === "right") {
-      // committing the step
-      column = nextColumn;
-      row = nextRow;
-      direction = nextDirection;
-      snake.push(...nextSnake);
-      return findEmptyCell();
-    }
-
-    // if there's a barrier, go down and keep looking
-    if (grid[nextRow][nextColumn] !== null) {
-      // going down
-      row++;
-      snake.push("down");
-      if (grid[row][column] !== null) {
-        return findEmptyCell();
+      // snake goes forward
+      if (nextDirection === "right") {
+        nextColumn++;
+        nextSnake.push("right");
+        if (nextColumn > columns - 1) {
+          nextRow++;
+          nextSnake.push("down");
+          nextColumn = columns - 1;
+          nextDirection = invertDirection(nextDirection);
+        }
       } else {
-        return
+        nextColumn--;
+        nextSnake.push("left");
+        if (nextColumn < 0) {
+          nextRow++;
+          nextSnake.push("down");
+          nextColumn = 0;
+          nextDirection = invertDirection(nextDirection);
+        }
       }
-    }
 
-    // committing the step
-    column = nextColumn;
-    row = nextRow;
-    direction = nextDirection;
-    snake.push(...nextSnake);
+      // don't stop on edges coming from right to left
+      if (nextColumn === 0 && nextDirection === "left") {
+        // committing the step
+        column = nextColumn;
+        row = nextRow;
+        direction = nextDirection;
+        snake.push(...nextSnake);
+        continue;
+      }
+
+      // don't stop on edges coming from left to right
+      if (nextColumn === columns - 1 && nextDirection === "right") {
+        // committing the step
+        column = nextColumn;
+        row = nextRow;
+        direction = nextDirection;
+        snake.push(...nextSnake);
+        continue;
+      }
+
+      // if there's a barrier, go down and keep looking
+      if (grid[nextRow][nextColumn] !== null) {
+        // going down
+        row++;
+        snake.push("down");
+        if (grid[row][column] !== null) {
+          continue;
+        } else {
+          break;
+        }
+      }
+
+      // committing the step
+      column = nextColumn;
+      row = nextRow;
+      direction = nextDirection;
+      snake.push(...nextSnake);
+      break;
+    } while (true);
+
+    return {
+      column,
+      row,
+      direction,
+      history: snake,
+    }
   }
 
   for (const item of items) {
@@ -138,8 +155,7 @@ export default function EventsSnakeGrid({
           snake.push("right");
           findEmptyCell();
         } else {
-          // findEmptyCell();
-          // TODO: path finding
+          // TODO: path finding (findEmptyCell()?)
         }
       } else {
         if (column - 1 >= 0) {
@@ -151,8 +167,7 @@ export default function EventsSnakeGrid({
           snake.push("left");
           findEmptyCell();
         } else {
-          // findEmptyCell();
-          // TODO: path finding
+          // TODO: path finding (findEmptyCell()?)
         }
       }
     } else {
