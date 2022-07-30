@@ -11,5 +11,6 @@
   background-color: #D9D9D9;
 }
 .events__item--big {
-  /* something big */
+  color: #D9D9D9;
+  background-color: #2D3648;
 }
