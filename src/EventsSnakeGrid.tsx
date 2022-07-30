@@ -45,9 +45,9 @@ function invertDirection(dir: Direction) {
 
 function findEmptyCell(
   grid: Cell[][],
-  columns: number,
   snakeProgress: SnakeProgress
 ): SnakeProgress {
+  const columns = grid[0].length;
   let { column, row, direction, history } = snakeProgress;
   do {
     // calculating next step
@@ -60,7 +60,6 @@ function findEmptyCell(
     if (nextDirection === "right") {
       nextColumn++;
       nextSnake.push("right");
-      // TODO: use grid[row].length instead of columns
       if (nextColumn > columns - 1) {
         nextRow++;
         nextSnake.push("down");
@@ -172,21 +171,21 @@ export default function EventsSnakeGrid({
       if (snakeProgress.direction === "right") {
         if (snakeProgress.column + 1 < columns) {
           snakeProgress = fillBigItem(grid, snakeProgress, item);
-          snakeProgress = findEmptyCell(grid, columns, snakeProgress);
+          snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
           // TODO: path finding (findEmptyCell()?)
         }
       } else {
         if (snakeProgress.column - 1 >= 0) {
           snakeProgress = fillBigItem(grid, snakeProgress, item);
-          snakeProgress = findEmptyCell(grid, columns, snakeProgress);
+          snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
           // TODO: path finding (findEmptyCell()?)
         }
       }
     } else {
       grid[snakeProgress.row][snakeProgress.column] = item.id;
-      snakeProgress = findEmptyCell(grid, columns, snakeProgress);
+      snakeProgress = findEmptyCell(grid, snakeProgress);
     }
   }
 
