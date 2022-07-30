@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import EventsSnakeGrid from "./EventsSnakeGrid";
+import { useColorScheme } from "./useColorScheme";
 
 const defaultItems = [
   { id: 1, title: "1", isBig: true },
@@ -29,30 +30,17 @@ function generateItems() {
 
 export default function App() {
   const [items, setItems] = useState(defaultItems);
-
-  const colorSchemeQueryList = window.matchMedia('(prefers-color-scheme: dark)');
-  const [colorScheme, setColorScheme] = useState(colorSchemeQueryList.matches ? 'dark' : 'light');
-  useEffect(() => {
-    const handleSetColorScheme = (e: MediaQueryListEvent | MediaQueryList) => {
-      if (e.matches) {
-        setColorScheme('dark');
-      } else {
-        setColorScheme('light');
-      }
-    }
-    handleSetColorScheme(colorSchemeQueryList);
-    colorSchemeQueryList.addEventListener('change', handleSetColorScheme);
-    return () => {
-      colorSchemeQueryList.removeEventListener('change', handleSetColorScheme);
-    }
-  })
+  const colorScheme = useColorScheme();
 
   return (
     <div>
       <button onClick={() => setItems(generateItems())}>Random</button>
-      <br/>
-      <br/>
-      <EventsSnakeGrid items={items} lineColor={colorScheme === 'dark' ? "#D9D9D9" : "#2D3648"} />
+      <br />
+      <br />
+      <EventsSnakeGrid
+        items={items}
+        lineColor={colorScheme === "dark" ? "#D9D9D9" : "#2D3648"}
+      />
     </div>
   );
 }
