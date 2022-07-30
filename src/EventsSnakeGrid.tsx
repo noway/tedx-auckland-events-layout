@@ -17,10 +17,10 @@ interface Props {
 
 const MAX_ROWS = 9; // TODO: dynamic
 const MAX_COLS = 4;
+const GRID_GAP = 25;
+const GRID_CELL_SIDE = 100;
 
-export default function EventsSnakeGrid(props: Props) {
-  const items = props.items
-
+export default function EventsSnakeGrid({ items }: Props) {
   // mutable variables
   let grid: Cell[][] = [[]];
   let row = 0;
@@ -160,19 +160,17 @@ export default function EventsSnakeGrid(props: Props) {
     .join(" ");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const gap = 25;
-  const cell = 100;
 
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
-    const step = cell + gap;
+    const step = GRID_CELL_SIDE + GRID_GAP;
     const halfStep = step / 2;
-    let curPos: [number, number] = [cell / 2, cell / 2];
+    let curPos: [number, number] = [GRID_CELL_SIDE / 2, GRID_CELL_SIDE / 2];
 
     function clamp(num: number) {
       // TODO: i'm not sure why it's only 1 gap
-      return Math.max(Math.min(num, step * 4 - cell / 2 - gap), halfStep);
+      return Math.max(Math.min(num, step * 4 - GRID_CELL_SIDE / 2 - GRID_GAP), halfStep);
     }
 
     ctx.beginPath();
@@ -219,9 +217,9 @@ export default function EventsSnakeGrid(props: Props) {
         style={{
           display: "grid",
           gridTemplateAreas: areas,
-          gridAutoColumns: cell,
-          gridAutoRows: cell,
-          gap: gap,
+          gridAutoColumns: GRID_CELL_SIDE,
+          gridAutoRows: GRID_CELL_SIDE,
+          gap: GRID_GAP,
           color: "#2D3648",
         }}
       >
