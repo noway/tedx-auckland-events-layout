@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import './App.css'
+import "./App.css";
 
 const items = [
   { t: "01", big: true },
@@ -16,7 +16,7 @@ const items = [
   { t: "12", big: false },
   { t: "13", big: true },
   { t: "14", big: false },
-  { t: "15", big: false }
+  { t: "15", big: false },
 ];
 
 const MAX_ROWS = 9; // TODO: dynamic
@@ -33,7 +33,7 @@ for (var i = 0; i < MAX_ROWS; i++) {
 
 let row = 0;
 let column = 0;
-type Direction = "right" | "left"
+type Direction = "right" | "left";
 let direction: Direction = "right";
 function invertDirection(dir: Direction) {
   if (dir === "right") {
@@ -218,12 +218,12 @@ export default function App() {
       />
       <div
         style={{
-          gridAutoRows: cell,
-          gridAutoColumns: cell,
           display: "grid",
           gridTemplateAreas: areas,
+          gridAutoColumns: cell,
+          gridAutoRows: cell,
+          gap: gap,
           color: "#2D3648",
-          gap: gap
         }}
       >
         {items.map((item, i) => {
@@ -232,7 +232,7 @@ export default function App() {
               key={i}
               style={{
                 gridArea: `cell${item.t}`,
-                backgroundColor: "#D9D9D9"
+                backgroundColor: "#D9D9D9",
               }}
             >
               {item.t}
