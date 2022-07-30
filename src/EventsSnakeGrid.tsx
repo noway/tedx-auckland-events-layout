@@ -2,9 +2,12 @@ import { useRef, useEffect } from "react";
 import "./App.css";
 
 interface Item {
+  id: number;
   title: string;
   isBig: boolean;
 }
+
+type Cell = number | null
 
 interface Props {
   items: Item[]
@@ -17,10 +20,10 @@ export default function EventsSnakeGrid(props: Props) {
   const items = props.items
 
   // create grid
-  let grid: string[][] = [[]];
+  let grid: Cell[][] = [[]];
   for (var i = 0; i < MAX_ROWS; i++) {
     for (var j = 0; j < MAX_COLS; j++) {
-      grid[grid.length - 1].push("00");
+      grid[grid.length - 1].push(null);
     }
     if (i !== MAX_ROWS - 1) grid.push([]);
   }
@@ -84,7 +87,7 @@ export default function EventsSnakeGrid(props: Props) {
       return findEmptyCell();
     }
 
-    if (grid[nextRow][nextColumn] === "00") {
+    if (grid[nextRow][nextColumn] === null) {
       // committing the step
       column = nextColumn;
       row = nextRow;
@@ -95,7 +98,7 @@ export default function EventsSnakeGrid(props: Props) {
       // going down
       row++;
       snake.push("down");
-      if (grid[row][column] === "00") {
+      if (grid[row][column] === null) {
         return;
       } else {
         // TODO: non-recursive implementation
@@ -109,10 +112,10 @@ export default function EventsSnakeGrid(props: Props) {
     if (item.isBig) {
       if (direction === "right") {
         if (column + 1 < MAX_COLS) {
-          grid[row][column] = item.title;
-          grid[row][column + 1] = item.title;
-          grid[row + 1][column] = item.title;
-          grid[row + 1][column + 1] = item.title;
+          grid[row][column] = item.id;
+          grid[row][column + 1] = item.id;
+          grid[row + 1][column] = item.id;
+          grid[row + 1][column + 1] = item.id;
           column++;
           snake.push("right");
           findEmptyCell();
@@ -122,10 +125,10 @@ export default function EventsSnakeGrid(props: Props) {
         }
       } else {
         if (column - 1 >= 0) {
-          grid[row][column] = item.title;
-          grid[row][column - 1] = item.title;
-          grid[row + 1][column] = item.title;
-          grid[row + 1][column - 1] = item.title;
+          grid[row][column] = item.id;
+          grid[row][column - 1] = item.id;
+          grid[row + 1][column] = item.id;
+          grid[row + 1][column - 1] = item.id;
           column--;
           snake.push("left");
           findEmptyCell();
@@ -135,7 +138,7 @@ export default function EventsSnakeGrid(props: Props) {
         }
       }
     } else {
-      grid[row][column] = item.title;
+      grid[row][column] = item.id;
       findEmptyCell();
     }
   }
@@ -144,10 +147,10 @@ export default function EventsSnakeGrid(props: Props) {
     .map((gridLine) => {
       const line = gridLine
         .map((cell) => {
-          if (cell === "00") {
+          if (cell === null) {
             return ".";
           }
-          return `cell${cell}`;
+          return `item-${cell}`;
         })
         .join(" ");
       return `'${line}'`;
@@ -224,7 +227,7 @@ export default function EventsSnakeGrid(props: Props) {
             <div
               key={i}
               style={{
-                gridArea: `cell${item.title}`,
+                gridArea: `item-${item.id}`,
                 backgroundColor: "#D9D9D9",
               }}
             >
