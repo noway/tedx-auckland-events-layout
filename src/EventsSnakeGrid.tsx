@@ -1,10 +1,9 @@
 import { useRef, useEffect } from "react";
 import "./App.css";
 
-
 interface Item {
-  t: string;
-  big: boolean;
+  title: string;
+  isBig: boolean;
 }
 
 interface Props {
@@ -107,13 +106,13 @@ export default function EventsSnakeGrid(props: Props) {
 
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
-    if (item.big) {
+    if (item.isBig) {
       if (direction === "right") {
         if (column + 1 < MAX_COLS) {
-          grid[row][column] = item.t;
-          grid[row][column + 1] = item.t;
-          grid[row + 1][column] = item.t;
-          grid[row + 1][column + 1] = item.t;
+          grid[row][column] = item.title;
+          grid[row][column + 1] = item.title;
+          grid[row + 1][column] = item.title;
+          grid[row + 1][column + 1] = item.title;
           column++;
           snake.push("right");
           findEmptyCell();
@@ -123,10 +122,10 @@ export default function EventsSnakeGrid(props: Props) {
         }
       } else {
         if (column - 1 >= 0) {
-          grid[row][column] = item.t;
-          grid[row][column - 1] = item.t;
-          grid[row + 1][column] = item.t;
-          grid[row + 1][column - 1] = item.t;
+          grid[row][column] = item.title;
+          grid[row][column - 1] = item.title;
+          grid[row + 1][column] = item.title;
+          grid[row + 1][column - 1] = item.title;
           column--;
           snake.push("left");
           findEmptyCell();
@@ -136,7 +135,7 @@ export default function EventsSnakeGrid(props: Props) {
         }
       }
     } else {
-      grid[row][column] = item.t;
+      grid[row][column] = item.title;
       findEmptyCell();
     }
   }
@@ -225,11 +224,11 @@ export default function EventsSnakeGrid(props: Props) {
             <div
               key={i}
               style={{
-                gridArea: `cell${item.t}`,
+                gridArea: `cell${item.title}`,
                 backgroundColor: "#D9D9D9",
               }}
             >
-              {item.t}
+              {item.title}
             </div>
           );
         })}
