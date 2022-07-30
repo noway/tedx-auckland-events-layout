@@ -1,3 +1,4 @@
+import { useState } from "react";
 import EventsSnakeGrid from "./EventsSnakeGrid";
 
 const items = [
@@ -18,9 +19,21 @@ const items = [
   { id: 15, title: "15", isBig: false },
 ];
 
+function generateItems() {
+  const items = [];
+  for (let i = 0; i < 16; i++) {
+    items.push({ id: i, title: i.toString(), isBig: Math.random() > 0.5 });
+  }
+  return items;
+}
+
 export default function App() {
+  const [items, setItems] = useState(generateItems());
   return (
     <div>
+      <button onClick={() => setItems(generateItems())}>Random</button>
+      <br/>
+      <br/>
       <EventsSnakeGrid items={items} lineColor={"white"} />
     </div>
   );

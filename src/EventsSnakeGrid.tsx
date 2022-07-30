@@ -226,7 +226,7 @@ export default function EventsSnakeGrid({
     return () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
-  }, [lineColor, history]);
+  }, [lineColor, history, snakeProgress, columns, cellSize, gap]);
 
   return (
     <>
