@@ -8,6 +8,8 @@ interface Item {
 }
 
 type Cell = number | null
+type Direction = "right" | "left";
+type SnakeDirection = Direction | "down"
 
 interface Props {
   items: Item[]
@@ -19,8 +21,14 @@ const MAX_COLS = 4;
 export default function EventsSnakeGrid(props: Props) {
   const items = props.items
 
-  // create grid
+  // mutable variables
   let grid: Cell[][] = [[]];
+  let row = 0;
+  let column = 0;
+  let direction: Direction = "right";
+  let snake: SnakeDirection[] = [];
+
+  // create grid
   for (var i = 0; i < MAX_ROWS; i++) {
     for (var j = 0; j < MAX_COLS; j++) {
       grid[grid.length - 1].push(null);
@@ -28,10 +36,6 @@ export default function EventsSnakeGrid(props: Props) {
     if (i !== MAX_ROWS - 1) grid.push([]);
   }
 
-  let row = 0;
-  let column = 0;
-  type Direction = "right" | "left";
-  let direction: Direction = "right";
   function invertDirection(dir: Direction) {
     if (dir === "right") {
       return "left";
@@ -40,14 +44,12 @@ export default function EventsSnakeGrid(props: Props) {
     }
   }
 
-  let snake: string[] = [];
-
   function findEmptyCell(): void {
     // calculating next step
     let nextColumn = column;
     let nextRow = row;
     let nextDirection = direction;
-    let nextSnake = [];
+    let nextSnake: SnakeDirection[] = [];
     if (nextDirection === "right") {
       nextColumn++;
       nextSnake.push("right");
@@ -172,6 +174,7 @@ export default function EventsSnakeGrid(props: Props) {
       // TODO: i'm not sure why it's only 1 gap
       return Math.max(Math.min(num, step * 4 - cell / 2 - gap), halfStep);
     }
+
     ctx.beginPath();
     for (var i = 0; i < snake.length; i++) {
       const instruction = snake[i];
