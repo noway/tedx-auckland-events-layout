@@ -60,6 +60,7 @@ function findEmptyCell(
     if (nextDirection === "right") {
       nextColumn++;
       nextSnake.push("right");
+      // TODO: use grid[row].length instead of columns
       if (nextColumn > columns - 1) {
         nextRow++;
         nextSnake.push("down");
@@ -141,7 +142,6 @@ export default function EventsSnakeGrid({
 
   // mutable variables
   let grid: Cell[][] = createGrid(MAX_ROWS, columns);
-
   let snakeProgress: SnakeProgress = {
     row: 0,
     column: 0,
@@ -153,6 +153,7 @@ export default function EventsSnakeGrid({
     if (item.isBig) {
       if (snakeProgress.direction === "right") {
         if (snakeProgress.column + 1 < columns) {
+          // TODO: separate out into a function fillBigItem
           grid[snakeProgress.row][snakeProgress.column] = item.id;
           grid[snakeProgress.row][snakeProgress.column + 1] = item.id;
           grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
