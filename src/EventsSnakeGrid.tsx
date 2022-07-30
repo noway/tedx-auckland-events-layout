@@ -233,7 +233,8 @@ export default function EventsSnakeGrid({
     }
 
     ctx.beginPath();
-    ctx.strokeStyle = lineColor;
+    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--events-snake-line'); // #999999
+;
     for (const instruction of snakeProgress.history) {
       if (instruction === "left") {
         ctx.moveTo(...curPos);
