@@ -28,17 +28,6 @@ interface Props {
 
 const MAX_ROWS = 9; // TODO: dynamic
 
-function createGrid(rows: number, cols: number) {
-  const grid: Cell[][] = [];
-  for (let i = 0; i < rows; i++) {
-    grid.push([]);
-    for (let j = 0; j < cols; j++) {
-      grid[i].push(null);
-    }
-  }
-  return grid;
-}
-
 function invertDirection(dir: Direction) {
   return dir === "right" ? "left" : "right";
 }
@@ -157,7 +146,7 @@ export default function EventsSnakeGrid({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // mutable variables
-  let grid: Cell[][] = createGrid(2, columns);
+  let grid: Cell[][] = Array(2).fill(undefined).map(() => Array(columns).fill(null))
   let snakeProgress: SnakeProgress = {
     row: 0,
     column: 0,
