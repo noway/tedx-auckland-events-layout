@@ -165,12 +165,12 @@ export default function EventsSnakeGrid({ items }: Props) {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
     const step = GRID_CELL_SIDE + GRID_GAP;
-    const halfStep = step / 2;
+    const halfCell = GRID_CELL_SIDE / 2;
     let curPos: [number, number] = [GRID_CELL_SIDE / 2, GRID_CELL_SIDE / 2];
 
     function clamp(num: number) {
       // TODO: i'm not sure why it's only 1 gap
-      return Math.max(Math.min(num, step * 4 - GRID_CELL_SIDE / 2 - GRID_GAP), halfStep);
+      return Math.max(Math.min(num, step * 4 - GRID_CELL_SIDE / 2 - GRID_GAP), halfCell);
     }
 
     ctx.beginPath();
