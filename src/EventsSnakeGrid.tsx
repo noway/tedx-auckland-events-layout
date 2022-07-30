@@ -109,8 +109,7 @@ export default function EventsSnakeGrid({ items }: Props) {
     }
   }
 
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
+  for (const item of items) {
     if (item.isBig) {
       if (direction === "right") {
         if (column + 1 < MAX_COLS) {
@@ -174,8 +173,7 @@ export default function EventsSnakeGrid({ items }: Props) {
     }
 
     ctx.beginPath();
-    for (let i = 0; i < snake.length; i++) {
-      const instruction = snake[i];
+    for (const instruction of snake) {
       if (instruction === "left") {
         ctx.moveTo(...curPos);
         ctx.lineTo(clamp(curPos[0] - step), curPos[1]);
