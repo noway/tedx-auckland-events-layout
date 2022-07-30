@@ -5,12 +5,6 @@
   padding: 2rem;
 }
 
-.App {
-  display: grid;
-  grid-auto-rows: 100px;
-  grid-auto-columns: 100px;
-}
-
 canvas {
   position: absolute;
   z-index: -1;

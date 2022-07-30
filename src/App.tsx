@@ -19,7 +19,7 @@ const items = [
   { t: "15", big: false }
 ];
 
-const MAX_ROWS = 9;
+const MAX_ROWS = 9; // TODO: dynamic
 const MAX_COLS = 4;
 
 // create grid
@@ -148,8 +148,8 @@ for (let i = 0; i < items.length; i++) {
 
 export default function App() {
   const areas = grid
-    .map((gridline) => {
-      const line = gridline
+    .map((gridLine) => {
+      const line = gridLine
         .map((cell) => {
           if (cell === "00") {
             return ".";
@@ -163,38 +163,38 @@ export default function App() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gap = 25;
+  const cell = 100;
 
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
-    const cell = 100;
     const step = cell + gap;
-    const halfstep = step / 2;
-    let curpos: [number, number] = [cell / 2, cell / 2];
+    const halfStep = step / 2;
+    let curPos: [number, number] = [cell / 2, cell / 2];
 
     function clamp(num: number) {
       // TODO: i'm not sure why it's only 1 gap
-      return Math.max(Math.min(num, step * 4 - cell / 2 - gap), halfstep);
+      return Math.max(Math.min(num, step * 4 - cell / 2 - gap), halfStep);
     }
     ctx.beginPath();
     for (var i = 0; i < snake.length; i++) {
       const instruction = snake[i];
       if (instruction === "left") {
-        ctx.moveTo(...curpos);
-        ctx.lineTo(clamp(curpos[0] - step), curpos[1]);
-        curpos = [clamp(curpos[0] - step), curpos[1]];
+        ctx.moveTo(...curPos);
+        ctx.lineTo(clamp(curPos[0] - step), curPos[1]);
+        curPos = [clamp(curPos[0] - step), curPos[1]];
         direction = "left";
       }
       if (instruction === "right") {
-        ctx.moveTo(...curpos);
-        ctx.lineTo(clamp(curpos[0] + step), curpos[1]);
-        curpos = [clamp(curpos[0] + step), curpos[1]];
+        ctx.moveTo(...curPos);
+        ctx.lineTo(clamp(curPos[0] + step), curPos[1]);
+        curPos = [clamp(curPos[0] + step), curPos[1]];
         direction = "right";
       }
       if (instruction === "down") {
-        ctx.moveTo(curpos[0], curpos[1]);
-        ctx.lineTo(curpos[0], curpos[1] + step);
-        curpos = [curpos[0], curpos[1] + step];
+        ctx.moveTo(curPos[0], curPos[1]);
+        ctx.lineTo(curPos[0], curPos[1] + step);
+        curPos = [curPos[0], curPos[1] + step];
       }
     }
     ctx.stroke();
@@ -206,10 +206,13 @@ export default function App() {
 
   return (
     <>
+      {/* TODO: dynamic */}
       <canvas ref={canvasRef} width={500} height={1000} />
       <div
-        className="App"
+        className="events-grid"
         style={{
+          gridAutoRows: cell,
+          gridAutoColumns: cell,
           display: "grid",
           gridTemplateAreas: areas,
           color: "#2D3648",
