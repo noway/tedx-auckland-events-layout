@@ -126,6 +126,24 @@ function findEmptyCell(
   };
 }
 
+function fillBigItem(
+  grid: Cell[][],
+  snakeProgress: SnakeProgress,
+  item: Item
+): SnakeProgress {
+  const directionSign = snakeProgress.direction === "right" ? 1 : -1;
+  grid[snakeProgress.row][snakeProgress.column] = item.id;
+  grid[snakeProgress.row][snakeProgress.column + 1 * directionSign] = item.id;
+  grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
+  grid[snakeProgress.row + 1][snakeProgress.column + 1 * directionSign] =
+    item.id;
+  return {
+    ...snakeProgress,
+    column: snakeProgress.column + directionSign,
+    history: [...snakeProgress.history, snakeProgress.direction],
+  };
+}
+
 export default function EventsSnakeGrid({
   items,
   lineColor,
@@ -153,25 +171,14 @@ export default function EventsSnakeGrid({
     if (item.isBig) {
       if (snakeProgress.direction === "right") {
         if (snakeProgress.column + 1 < columns) {
-          // TODO: separate out into a function fillBigItem
-          grid[snakeProgress.row][snakeProgress.column] = item.id;
-          grid[snakeProgress.row][snakeProgress.column + 1] = item.id;
-          grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
-          grid[snakeProgress.row + 1][snakeProgress.column + 1] = item.id;
-          snakeProgress.column++;
-          snakeProgress.history.push("right");
+          snakeProgress = fillBigItem(grid, snakeProgress, item);
           snakeProgress = findEmptyCell(grid, columns, snakeProgress);
         } else {
           // TODO: path finding (findEmptyCell()?)
         }
       } else {
         if (snakeProgress.column - 1 >= 0) {
-          grid[snakeProgress.row][snakeProgress.column] = item.id;
-          grid[snakeProgress.row][snakeProgress.column - 1] = item.id;
-          grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
-          grid[snakeProgress.row + 1][snakeProgress.column - 1] = item.id;
-          snakeProgress.column--;
-          snakeProgress.history.push("left");
+          snakeProgress = fillBigItem(grid, snakeProgress, item);
           snakeProgress = findEmptyCell(grid, columns, snakeProgress);
         } else {
           // TODO: path finding (findEmptyCell()?)
