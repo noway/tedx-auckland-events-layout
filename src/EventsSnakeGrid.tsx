@@ -26,8 +26,6 @@ interface Props {
   gap?: number;
 }
 
-const MAX_ROWS = 9; // TODO: dynamic
-
 function invertDirection(dir: Direction) {
   return dir === "right" ? "left" : "right";
 }
@@ -237,7 +235,7 @@ export default function EventsSnakeGrid({
         // just like above, subtract 1 grid gap because each step includes a gap,
         // we just need to remove the last gap
         width={GRID_STEP * columns - gap}
-        height={GRID_STEP * MAX_ROWS - gap}
+        height={GRID_STEP * grid.length - gap}
         style={{
           position: "absolute",
           zIndex: -1,
