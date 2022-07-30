@@ -162,17 +162,17 @@ export default function EventsSnakeGrid({ items }: Props) {
     })
     .join(" ");
 
+  const step = GRID_CELL_SIDE + GRID_GAP;
+  const halfCell = GRID_CELL_SIDE / 2;
 
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
-    const step = GRID_CELL_SIDE + GRID_GAP;
-    const halfCell = GRID_CELL_SIDE / 2;
     let curPos: [number, number] = [GRID_CELL_SIDE / 2, GRID_CELL_SIDE / 2];
 
     function clamp(num: number) {
-      // TODO: i'm not sure why it's only 1 gap
-      return Math.max(Math.min(num, step * 4 - GRID_CELL_SIDE / 2 - GRID_GAP), halfCell);
+      // 1 grid gap here because each step includes a gap, we just need to remove the last gap
+      return Math.max(Math.min(num, step * MAX_COLS - GRID_CELL_SIDE / 2 - GRID_GAP), halfCell);
     }
 
     ctx.beginPath();
@@ -206,9 +206,10 @@ export default function EventsSnakeGrid({ items }: Props) {
     <>
       <canvas
         ref={canvasRef}
-        // TODO: dynamic
-        width={500}
-        height={1000}
+        // just like above, subtract 1 grid gap because each step includes a gap,
+        // we just need to remove the last gap
+        width={step * MAX_COLS - GRID_GAP}
+        height={step * MAX_ROWS - GRID_GAP}
         style={{
           position: "absolute",
           zIndex: -1,
