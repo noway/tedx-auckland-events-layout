@@ -158,14 +158,42 @@ export default function EventsSnakeGrid({
     if (item.isBig) {
       if (snakeProgress.direction === "right") {
         if (snakeProgress.column + 1 < columns) {
-          snakeProgress = fillBigItem(grid, snakeProgress, item);
+          const directionSign = 1;
+          while (
+            grid[snakeProgress.row][snakeProgress.column + directionSign] !==
+            null
+          ) {
+            snakeProgress = findEmptyCell(grid, snakeProgress);
+          }
+
+          grid[snakeProgress.row][snakeProgress.column] = item.id;
+          grid[snakeProgress.row][snakeProgress.column + directionSign] =
+            item.id;
+          grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
+          grid[snakeProgress.row + 1][snakeProgress.column + directionSign] =
+            item.id;
+
           snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
           // TODO: path finding (findEmptyCell()?)
         }
       } else {
         if (snakeProgress.column - 1 >= 0) {
-          snakeProgress = fillBigItem(grid, snakeProgress, item);
+          const directionSign = -1;
+          while (
+            grid[snakeProgress.row][snakeProgress.column + directionSign] !==
+            null
+          ) {
+            snakeProgress = findEmptyCell(grid, snakeProgress);
+          }
+
+          grid[snakeProgress.row][snakeProgress.column] = item.id;
+          grid[snakeProgress.row][snakeProgress.column + directionSign] =
+            item.id;
+          grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
+          grid[snakeProgress.row + 1][snakeProgress.column + directionSign] =
+            item.id;
+
           snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
           // TODO: path finding (findEmptyCell()?)
@@ -190,6 +218,8 @@ export default function EventsSnakeGrid({
       return `'${line}'`;
     })
     .join(" ");
+
+  console.log("areas", areas);
 
   useEffect(() => {
     const canvas = canvasRef.current!;
