@@ -52,7 +52,7 @@ export default function App() {
       <button onClick={() => setItems(generateItems())}>Random</button>
       <br/>
       <br/>
-      <EventsSnakeGrid items={items} lineColor={colorScheme === 'dark' ? "white" : "black"} />
+      <EventsSnakeGrid items={items} lineColor={colorScheme === 'dark' ? "#D9D9D9" : "#2D3648"} />
     </div>
   );
 }

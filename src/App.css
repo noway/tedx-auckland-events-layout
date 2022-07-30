@@ -4,9 +4,6 @@
   padding: 2rem;
 }
 
-:root {
-  --events-snake-line: #D9D9D9;
-}
 .events__grid {
   color: #2D3648;
 }
@@ -19,9 +16,6 @@
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
-    --events-snake-line: #2D3648;
-  }
   .events__grid {
     color: #D9D9D9;
   }
