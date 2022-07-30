@@ -175,7 +175,9 @@ export default function EventsSnakeGrid({
 
           snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
-          console.error("This code path should not be hit - we avoid stopping on edges (right-to-left case)");
+          console.error(
+            "This code path should not be hit - we avoid stopping on edges (right-to-left case)"
+          );
         }
       } else {
         if (snakeProgress.column - 1 >= 0) {
@@ -196,7 +198,9 @@ export default function EventsSnakeGrid({
 
           snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
-          console.error("This code path should not be hit - we avoid stopping on edges (left-to-right case)");
+          console.error(
+            "This code path should not be hit - we avoid stopping on edges (left-to-right case)"
+          );
         }
       }
     } else {
@@ -233,8 +237,9 @@ export default function EventsSnakeGrid({
     }
 
     ctx.beginPath();
-    ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--events-snake-line'); // #999999
-;
+    ctx.strokeStyle = getComputedStyle(
+      document.documentElement
+    ).getPropertyValue("--events-snake-line"); // #999999
     for (const instruction of snakeProgress.history) {
       if (instruction === "left") {
         ctx.moveTo(...curPos);
