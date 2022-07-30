@@ -31,15 +31,24 @@ function generateItems() {
 export default function App() {
   const [items, setItems] = useState(defaultItems);
   const colorScheme = useColorScheme();
+  const [cellSize, setCellSize] = useState(100);
+  const [columns, setColumns] = useState(4);
+  const [gap, setGap] = useState(25);
 
   return (
     <div>
       <button onClick={() => setItems(generateItems())}>Random</button>
+      <input type="range" min={20} max={300} value={cellSize} onChange={(e) => setCellSize(Number(e.target.value))}/>
+      <input type="range" min={2} max={10} value={columns} onChange={(e) => setColumns(Number(e.target.value))}/>
+      <input type="range" min={0} max={50} value={gap} onChange={(e) => setGap(Number(e.target.value))}/>
       <br />
       <br />
       <EventsSnakeGrid
         items={items}
         lineColor={colorScheme === "dark" ? "#D9D9D9" : "#2D3648"}
+        cellSize={cellSize}
+        columns={columns}
+        gap={gap}
       />
     </div>
   );
