@@ -265,11 +265,11 @@ export default function EventsSnakeGrid({
         {items.map((item, i) => {
           return (
             <div
+              key={i}
               className={[
                 "events__item",
                 ...(item.isBig ? ["events__item--big"] : []),
               ].join(" ")}
-              key={i}
               style={{
                 gridArea: `item-${item.id}`,
               }}
