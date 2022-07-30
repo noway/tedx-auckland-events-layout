@@ -22,7 +22,7 @@ const items = [
 function generateItems() {
   const items = [];
   for (let i = 0; i < 16; i++) {
-    items.push({ id: i, title: i.toString(), isBig: Math.random() > 0.5 });
+    items.push({ id: i, title: i.toString(), isBig: Math.random() > 0.7 });
   }
   return items;
 }
