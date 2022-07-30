@@ -49,12 +49,21 @@ function findEmptyCell(
 ): SnakeProgress {
   const columns = grid[0].length;
   let { column, row, direction, history } = snakeProgress;
+
+  // calculating next step
   do {
-    // calculating next step
     let nextColumn = column;
     let nextRow = row;
     let nextDirection = direction;
     let nextSnake: SnakeDirection[] = [];
+
+    function commitStep() {
+      column = nextColumn;
+      if (nextRow > row) grid.push(Array(columns).fill(null));
+      row = nextRow;
+      direction = nextDirection;
+      history.push(...nextSnake);
+    }
 
     // snake goes forward
     if (nextDirection === "right") {
@@ -79,29 +88,24 @@ function findEmptyCell(
 
     // don't stop on edges coming from right to left
     if (nextColumn === 0 && nextDirection === "left") {
-      // committing the step
-      column = nextColumn;
-      row = nextRow;
-      direction = nextDirection;
-      history.push(...nextSnake);
+      commitStep();
       continue;
     }
 
     // don't stop on edges coming from left to right
     if (nextColumn === columns - 1 && nextDirection === "right") {
-      // committing the step
-      column = nextColumn;
-      row = nextRow;
-      direction = nextDirection;
-      history.push(...nextSnake);
+      commitStep();
       continue;
     }
 
     // if there's a barrier, go down and keep looking
     if (grid[nextRow][nextColumn] !== null) {
       // going down
-      row++;
-      history.push("down");
+      nextColumn = column;
+      nextRow = row + 1;
+      nextSnake = ["down"];
+
+      commitStep();
       if (grid[row][column] !== null) {
         continue;
       } else {
@@ -109,11 +113,7 @@ function findEmptyCell(
       }
     }
 
-    // committing the step
-    column = nextColumn;
-    row = nextRow;
-    direction = nextDirection;
-    history.push(...nextSnake);
+    commitStep();
     break;
   } while (true);
 
@@ -134,8 +134,7 @@ function fillBigItem(
   grid[snakeProgress.row][snakeProgress.column] = item.id;
   grid[snakeProgress.row][snakeProgress.column + directionSign] = item.id;
   grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
-  grid[snakeProgress.row + 1][snakeProgress.column + directionSign] =
-    item.id;
+  grid[snakeProgress.row + 1][snakeProgress.column + directionSign] = item.id;
   return {
     ...snakeProgress,
     column: snakeProgress.column + directionSign,
@@ -158,7 +157,7 @@ export default function EventsSnakeGrid({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // mutable variables
-  let grid: Cell[][] = createGrid(MAX_ROWS, columns);
+  let grid: Cell[][] = createGrid(2, columns);
   let snakeProgress: SnakeProgress = {
     row: 0,
     column: 0,
