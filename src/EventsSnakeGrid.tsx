@@ -43,8 +43,12 @@ function invertDirection(dir: Direction) {
   return dir === "right" ? "left" : "right";
 }
 
-function findEmptyCell(grid: Cell[][], columns: number, snakeProgress: SnakeProgress): SnakeProgress {
-  let { column, row, direction, history: snake } = snakeProgress;
+function findEmptyCell(
+  grid: Cell[][],
+  columns: number,
+  snakeProgress: SnakeProgress
+): SnakeProgress {
+  let { column, row, direction, history } = snakeProgress;
   do {
     // calculating next step
     let nextColumn = column;
@@ -79,7 +83,7 @@ function findEmptyCell(grid: Cell[][], columns: number, snakeProgress: SnakeProg
       column = nextColumn;
       row = nextRow;
       direction = nextDirection;
-      snake.push(...nextSnake);
+      history.push(...nextSnake);
       continue;
     }
 
@@ -89,7 +93,7 @@ function findEmptyCell(grid: Cell[][], columns: number, snakeProgress: SnakeProg
       column = nextColumn;
       row = nextRow;
       direction = nextDirection;
-      snake.push(...nextSnake);
+      history.push(...nextSnake);
       continue;
     }
 
@@ -97,7 +101,7 @@ function findEmptyCell(grid: Cell[][], columns: number, snakeProgress: SnakeProg
     if (grid[nextRow][nextColumn] !== null) {
       // going down
       row++;
-      snake.push("down");
+      history.push("down");
       if (grid[row][column] !== null) {
         continue;
       } else {
@@ -109,7 +113,7 @@ function findEmptyCell(grid: Cell[][], columns: number, snakeProgress: SnakeProg
     column = nextColumn;
     row = nextRow;
     direction = nextDirection;
-    snake.push(...nextSnake);
+    history.push(...nextSnake);
     break;
   } while (true);
 
@@ -117,7 +121,7 @@ function findEmptyCell(grid: Cell[][], columns: number, snakeProgress: SnakeProg
     column,
     row,
     direction,
-    history: snake,
+    history,
   };
 }
 
@@ -140,7 +144,7 @@ export default function EventsSnakeGrid({
   let row = 0;
   let column = 0;
   let direction: Direction = "right";
-  let snake: SnakeDirection[] = [];
+  let history: SnakeDirection[] = [];
 
   for (const item of items) {
     if (item.isBig) {
@@ -151,13 +155,13 @@ export default function EventsSnakeGrid({
           grid[row + 1][column] = item.id;
           grid[row + 1][column + 1] = item.id;
           column++;
-          snake.push("right");
-          ({
+          history.push("right");
+          ({ column, row, direction, history } = findEmptyCell(grid, columns, {
             column,
             row,
             direction,
-            history: snake,
-          } = findEmptyCell(grid, columns, { column, row, direction, history: snake }));
+            history,
+          }));
         } else {
           // TODO: path finding (findEmptyCell()?)
         }
@@ -168,25 +172,25 @@ export default function EventsSnakeGrid({
           grid[row + 1][column] = item.id;
           grid[row + 1][column - 1] = item.id;
           column--;
-          snake.push("left");
-          ({
+          history.push("left");
+          ({ column, row, direction, history } = findEmptyCell(grid, columns, {
             column,
             row,
             direction,
-            history: snake,
-          } = findEmptyCell(grid, columns, { column, row, direction, history: snake }));
+            history,
+          }));
         } else {
           // TODO: path finding (findEmptyCell()?)
         }
       }
     } else {
       grid[row][column] = item.id;
-      ({
+      ({ column, row, direction, history } = findEmptyCell(grid, columns, {
         column,
         row,
         direction,
-        history: snake,
-      } = findEmptyCell(grid, columns, { column, row, direction, history: snake }));
+        history,
+      }));
     }
   }
 
@@ -219,7 +223,7 @@ export default function EventsSnakeGrid({
 
     ctx.beginPath();
     ctx.strokeStyle = lineColor;
-    for (const instruction of snake) {
+    for (const instruction of history) {
       if (instruction === "left") {
         ctx.moveTo(...curPos);
         ctx.lineTo(clamp(curPos[0] - GRID_STEP), curPos[1]);
@@ -243,7 +247,7 @@ export default function EventsSnakeGrid({
     return () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
-  }, [lineColor, snake]);
+  }, [lineColor, history]);
 
   return (
     <>
