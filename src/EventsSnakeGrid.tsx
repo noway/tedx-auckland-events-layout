@@ -175,7 +175,7 @@ export default function EventsSnakeGrid({
 
           snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
-          // TODO: path finding (findEmptyCell()?)
+          console.error("This code path should not be hit - we avoid stopping on edges (right-to-left case)");
         }
       } else {
         if (snakeProgress.column - 1 >= 0) {
@@ -196,7 +196,7 @@ export default function EventsSnakeGrid({
 
           snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
-          // TODO: path finding (findEmptyCell()?)
+          console.error("This code path should not be hit - we avoid stopping on edges (left-to-right case)");
         }
       }
     } else {
