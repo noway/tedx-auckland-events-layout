@@ -141,56 +141,44 @@ export default function EventsSnakeGrid({
 
   // mutable variables
   let grid: Cell[][] = createGrid(MAX_ROWS, columns);
-  let row = 0;
-  let column = 0;
-  let direction: Direction = "right";
-  let history: SnakeDirection[] = [];
+
+  let snakeProgress: SnakeProgress = {
+    row: 0,
+    column: 0,
+    direction: "right",
+    history: [],
+  };
 
   for (const item of items) {
     if (item.isBig) {
-      if (direction === "right") {
-        if (column + 1 < columns) {
-          grid[row][column] = item.id;
-          grid[row][column + 1] = item.id;
-          grid[row + 1][column] = item.id;
-          grid[row + 1][column + 1] = item.id;
-          column++;
-          history.push("right");
-          ({ column, row, direction, history } = findEmptyCell(grid, columns, {
-            column,
-            row,
-            direction,
-            history,
-          }));
+      if (snakeProgress.direction === "right") {
+        if (snakeProgress.column + 1 < columns) {
+          grid[snakeProgress.row][snakeProgress.column] = item.id;
+          grid[snakeProgress.row][snakeProgress.column + 1] = item.id;
+          grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
+          grid[snakeProgress.row + 1][snakeProgress.column + 1] = item.id;
+          snakeProgress.column++;
+          snakeProgress.history.push("right");
+          snakeProgress = findEmptyCell(grid, columns, snakeProgress);
         } else {
           // TODO: path finding (findEmptyCell()?)
         }
       } else {
-        if (column - 1 >= 0) {
-          grid[row][column] = item.id;
-          grid[row][column - 1] = item.id;
-          grid[row + 1][column] = item.id;
-          grid[row + 1][column - 1] = item.id;
-          column--;
-          history.push("left");
-          ({ column, row, direction, history } = findEmptyCell(grid, columns, {
-            column,
-            row,
-            direction,
-            history,
-          }));
+        if (snakeProgress.column - 1 >= 0) {
+          grid[snakeProgress.row][snakeProgress.column] = item.id;
+          grid[snakeProgress.row][snakeProgress.column - 1] = item.id;
+          grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
+          grid[snakeProgress.row + 1][snakeProgress.column - 1] = item.id;
+          snakeProgress.column--;
+          snakeProgress.history.push("left");
+          snakeProgress = findEmptyCell(grid, columns, snakeProgress);
         } else {
           // TODO: path finding (findEmptyCell()?)
         }
       }
     } else {
-      grid[row][column] = item.id;
-      ({ column, row, direction, history } = findEmptyCell(grid, columns, {
-        column,
-        row,
-        direction,
-        history,
-      }));
+      grid[snakeProgress.row][snakeProgress.column] = item.id;
+      snakeProgress = findEmptyCell(grid, columns, snakeProgress);
     }
   }
 
@@ -223,18 +211,16 @@ export default function EventsSnakeGrid({
 
     ctx.beginPath();
     ctx.strokeStyle = lineColor;
-    for (const instruction of history) {
+    for (const instruction of snakeProgress.history) {
       if (instruction === "left") {
         ctx.moveTo(...curPos);
         ctx.lineTo(clamp(curPos[0] - GRID_STEP), curPos[1]);
         curPos = [clamp(curPos[0] - GRID_STEP), curPos[1]];
-        direction = "left";
       }
       if (instruction === "right") {
         ctx.moveTo(...curPos);
         ctx.lineTo(clamp(curPos[0] + GRID_STEP), curPos[1]);
         curPos = [clamp(curPos[0] + GRID_STEP), curPos[1]];
-        direction = "right";
       }
       if (instruction === "down") {
         ctx.moveTo(curPos[0], curPos[1]);
