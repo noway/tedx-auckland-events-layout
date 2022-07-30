@@ -1,16 +1,16 @@
 import { useState } from "react";
 import EventsSnakeGrid from "./EventsSnakeGrid";
 
-const items = [
-  { id: 1, title: "01", isBig: true },
-  { id: 2, title: "02", isBig: false },
-  { id: 3, title: "03", isBig: false },
-  { id: 4, title: "04", isBig: false },
-  { id: 5, title: "05", isBig: false },
-  { id: 6, title: "06", isBig: true },
-  { id: 7, title: "07", isBig: false },
-  { id: 8, title: "08", isBig: false },
-  { id: 9, title: "09", isBig: false },
+const defaultItems = [
+  { id: 1, title: "1", isBig: true },
+  { id: 2, title: "2", isBig: false },
+  { id: 3, title: "3", isBig: false },
+  { id: 4, title: "4", isBig: false },
+  { id: 5, title: "5", isBig: false },
+  { id: 6, title: "6", isBig: true },
+  { id: 7, title: "7", isBig: false },
+  { id: 8, title: "8", isBig: false },
+  { id: 9, title: "9", isBig: false },
   { id: 10, title: "10", isBig: false },
   { id: 11, title: "11", isBig: false },
   { id: 12, title: "12", isBig: false },
@@ -28,7 +28,7 @@ function generateItems() {
 }
 
 export default function App() {
-  const [items, setItems] = useState(generateItems());
+  const [items, setItems] = useState(defaultItems);
   return (
     <div>
       <button onClick={() => setItems(generateItems())}>Random</button>
