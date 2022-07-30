@@ -118,6 +118,11 @@ function fillBigItem(
   item: Item
 ): SnakeProgress {
   const directionSign = snakeProgress.direction === "right" ? 1 : -1;
+  while (
+    grid[snakeProgress.row][snakeProgress.column + directionSign] !== null
+  ) {
+    snakeProgress = findEmptyCell(grid, snakeProgress);
+  }
   grid[snakeProgress.row][snakeProgress.column] = item.id;
   grid[snakeProgress.row][snakeProgress.column + directionSign] = item.id;
   grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
@@ -158,21 +163,7 @@ export default function EventsSnakeGrid({
     if (item.isBig) {
       if (snakeProgress.direction === "right") {
         if (snakeProgress.column + 1 < columns) {
-          const directionSign = 1;
-          while (
-            grid[snakeProgress.row][snakeProgress.column + directionSign] !==
-            null
-          ) {
-            snakeProgress = findEmptyCell(grid, snakeProgress);
-          }
-
-          grid[snakeProgress.row][snakeProgress.column] = item.id;
-          grid[snakeProgress.row][snakeProgress.column + directionSign] =
-            item.id;
-          grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
-          grid[snakeProgress.row + 1][snakeProgress.column + directionSign] =
-            item.id;
-
+          snakeProgress = fillBigItem(grid, snakeProgress, item);
           snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
           console.error(
@@ -181,21 +172,7 @@ export default function EventsSnakeGrid({
         }
       } else {
         if (snakeProgress.column - 1 >= 0) {
-          const directionSign = -1;
-          while (
-            grid[snakeProgress.row][snakeProgress.column + directionSign] !==
-            null
-          ) {
-            snakeProgress = findEmptyCell(grid, snakeProgress);
-          }
-
-          grid[snakeProgress.row][snakeProgress.column] = item.id;
-          grid[snakeProgress.row][snakeProgress.column + directionSign] =
-            item.id;
-          grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
-          grid[snakeProgress.row + 1][snakeProgress.column + directionSign] =
-            item.id;
-
+          snakeProgress = fillBigItem(grid, snakeProgress, item);
           snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
           console.error(
