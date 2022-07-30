@@ -29,8 +29,8 @@ export default function EventsSnakeGrid({ items }: Props) {
   let snake: SnakeDirection[] = [];
 
   // create grid
-  for (var i = 0; i < MAX_ROWS; i++) {
-    for (var j = 0; j < MAX_COLS; j++) {
+  for (let i = 0; i < MAX_ROWS; i++) {
+    for (let j = 0; j < MAX_COLS; j++) {
       grid[grid.length - 1].push(null);
     }
     if (i !== MAX_ROWS - 1) grid.push([]);
@@ -174,7 +174,7 @@ export default function EventsSnakeGrid({ items }: Props) {
     }
 
     ctx.beginPath();
-    for (var i = 0; i < snake.length; i++) {
+    for (let i = 0; i < snake.length; i++) {
       const instruction = snake[i];
       if (instruction === "left") {
         ctx.moveTo(...curPos);
