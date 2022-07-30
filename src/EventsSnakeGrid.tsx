@@ -13,6 +13,7 @@ type SnakeDirection = Direction | "down"
 
 interface Props {
   items: Item[]
+  lineColor: string
 }
 
 const MAX_ROWS = 9; // TODO: dynamic
@@ -21,7 +22,7 @@ const MAX_COLS = 4;
 const GRID_GAP = 25;
 const GRID_CELL_SIDE = 100;
 
-export default function EventsSnakeGrid({ items }: Props) {
+export default function EventsSnakeGrid({ items, lineColor }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // mutable variables
@@ -176,6 +177,7 @@ export default function EventsSnakeGrid({ items }: Props) {
     }
 
     ctx.beginPath();
+    ctx.strokeStyle = lineColor;
     for (const instruction of snake) {
       if (instruction === "left") {
         ctx.moveTo(...curPos);
@@ -200,7 +202,7 @@ export default function EventsSnakeGrid({ items }: Props) {
     return () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
-  }, []);
+  }, [lineColor, snake]);
 
   return (
     <>
@@ -216,22 +218,22 @@ export default function EventsSnakeGrid({ items }: Props) {
         }}
       />
       <div
+        className="events__grid"
         style={{
           display: "grid",
           gridTemplateAreas: areas,
           gridAutoColumns: GRID_CELL_SIDE,
           gridAutoRows: GRID_CELL_SIDE,
           gap: GRID_GAP,
-          color: "#2D3648",
         }}
       >
         {items.map((item, i) => {
           return (
             <div
+              className={["events__item", ...[item.isBig ? "events__item--big" : ""]].join(" ")}
               key={i}
               style={{
                 gridArea: `item-${item.id}`,
-                backgroundColor: "#D9D9D9",
               }}
             >
               {item.title}

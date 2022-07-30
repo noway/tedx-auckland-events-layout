@@ -3,3 +3,13 @@
   margin: 0 auto;
   padding: 2rem;
 }
+
+.events__grid {
+  color: #2D3648;
+}
+.events__item {
+  background-color: #D9D9D9;
+}
+.events__item--big {
+  /* something big */
+}

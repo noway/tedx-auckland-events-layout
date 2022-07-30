@@ -21,7 +21,7 @@ const items = [
 export default function App() {
   return (
     <div>
-      <EventsSnakeGrid items={items} />
+      <EventsSnakeGrid items={items} lineColor={"white"} />
     </div>
   );
 }
