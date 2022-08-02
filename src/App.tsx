@@ -1,5 +1,6 @@
 import { useState } from "react";
 import EventsSnakeGrid from "./EventsSnakeGrid";
+import { random } from "./prng";
 import { useColorScheme } from "./useColorScheme";
 
 const defaultItems = [
@@ -20,24 +21,25 @@ const defaultItems = [
   { id: 15, title: "15", isBig: false },
 ];
 
-function generateItems() {
+function generateItems(seed: number) {
   const items = [];
   for (let i = 0; i < 16; i++) {
-    items.push({ id: i, title: i.toString(), isBig: Math.random() > 0.7 });
+    items.push({ id: i, title: i.toString(), isBig: random(i, seed) > 0.7 });
   }
   return items;
 }
 
 export default function App() {
   const colorScheme = useColorScheme();
-  const [items, setItems] = useState(defaultItems);
   const [cellSize, setCellSize] = useState(100);
   const [columns, setColumns] = useState(4);
   const [gap, setGap] = useState(25);
+  const [seed, setSeed] = useState<number | null>(null)
+  const items = seed ? generateItems(seed) : defaultItems;
 
   return (
     <div>
-      <button onClick={() => setItems(generateItems())}>Random</button>
+      <button onClick={() => setSeed(Math.random() * 256)}>Random</button>
       <input
         type="range"
         min={20}
