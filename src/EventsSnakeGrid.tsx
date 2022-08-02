@@ -112,6 +112,14 @@ function findEmptyCell(
   };
 }
 
+function strip(grid: Cell[][]) {
+  const lastRow = grid[grid.length - 1];
+  if (lastRow.every((cell) => cell === null)) {
+    return grid.slice(0, -1);
+  }
+  return grid
+}
+
 function fillBigItem(
   grid: Cell[][],
   snakeProgress: SnakeProgress,
@@ -191,7 +199,7 @@ export default function EventsSnakeGrid({
     }
   }
 
-  const areas = grid
+  const areas = strip(grid)
     .map((gridLine) => {
       const line = gridLine
         .map((cell) => {
