@@ -21,9 +21,9 @@ const defaultItems = [
   { id: 15, title: "15", isBig: false },
 ];
 
-function generateItems(seed: number) {
+function generateItems(seed: number, count: number) {
   const items = [];
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < count; i++) {
     items.push({ id: i, title: i.toString(), isBig: random(i, seed) > 0.7 });
   }
   return items;
@@ -34,8 +34,9 @@ export default function App() {
   const [cellSize, setCellSize] = useState(100);
   const [columns, setColumns] = useState(4);
   const [gap, setGap] = useState(25);
+  const [count, setCount] = useState(16);
   const [seed, setSeed] = useState<number | null>(null)
-  const items = seed ? generateItems(seed) : defaultItems;
+  const items = seed ? generateItems(seed, count) : defaultItems;
 
   return (
     <div>
@@ -60,6 +61,14 @@ export default function App() {
         max={50}
         value={gap}
         onChange={(e) => setGap(Number(e.target.value))}
+      />
+      <input
+        type="range"
+        min={4}
+        max={128}
+        value={count}
+        onChange={(e) => setCount(Number(e.target.value))}
+        disabled={seed === null}
       />
       <br />
       <br />
