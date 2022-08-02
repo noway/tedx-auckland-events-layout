@@ -85,7 +85,7 @@ function findEmptyCell(
       continue;
     }
 
-    // if there's a barrier, go down and keep looking
+    // if there's a barrier, go down instead and keep looking
     if (grid[nextRow][nextColumn] !== null) {
       // going down
       nextColumn = column;
@@ -96,12 +96,12 @@ function findEmptyCell(
       if (grid[row][column] !== null) {
         continue;
       } else {
-        break;
+        break; // found empty cell - stop
       }
     }
 
     commitStep();
-    break;
+    break; // found empty cell - stop
   } while (true);
 
   return {
@@ -118,15 +118,20 @@ function fillBigItem(
   item: Item
 ): SnakeProgress {
   const directionSign = snakeProgress.direction === "right" ? 1 : -1;
+
+  // if the adjacent cell is not empty, keep looking
   while (
     grid[snakeProgress.row][snakeProgress.column + directionSign] !== null
   ) {
     snakeProgress = findEmptyCell(grid, snakeProgress);
   }
+
+  // fill the 4 cells
   grid[snakeProgress.row][snakeProgress.column] = item.id;
   grid[snakeProgress.row][snakeProgress.column + directionSign] = item.id;
   grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
   grid[snakeProgress.row + 1][snakeProgress.column + directionSign] = item.id;
+
   return {
     ...snakeProgress,
     column: snakeProgress.column + directionSign,
