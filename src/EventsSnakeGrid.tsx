@@ -147,21 +147,7 @@ function fillBigItem(
   };
 }
 
-export default function EventsSnakeGrid({
-  items,
-  lineColor,
-  cellSize = 100,
-  columns = 4,
-  gap = 25,
-}: Props) {
-  // derived constants
-  const GRID_STEP = cellSize + gap;
-  const GRID_HALF_CELL = cellSize / 2;
-
-  // constants
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  // mutable variables
+function getGridTemplate(columns: number, items: Item[]) {
   let grid: Cell[][] = Array(2)
     .fill(undefined)
     .map(() => Array(columns).fill(null));
@@ -211,7 +197,26 @@ export default function EventsSnakeGrid({
         .join(" ");
       return `'${line}'`;
     })
-    .join(" ");
+
+  return { history: snakeProgress.history, areas };
+}
+
+export default function EventsSnakeGrid({
+  items,
+  lineColor,
+  cellSize = 100,
+  columns = 4,
+  gap = 25,
+}: Props) {
+  // derived constants
+  const GRID_STEP = cellSize + gap;
+  const GRID_HALF_CELL = cellSize / 2;
+
+  // constants
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // mutable variables
+  const { history, areas } = getGridTemplate(columns, items);
 
   useEffect(() => {
     const canvas = canvasRef.current!;
@@ -228,7 +233,7 @@ export default function EventsSnakeGrid({
 
     ctx.beginPath();
     ctx.strokeStyle = lineColor;
-    for (const instruction of snakeProgress.history) {
+    for (const instruction of history) {
       if (instruction === "left") {
         ctx.moveTo(...curPos);
         ctx.lineTo(clamp(curPos[0] - GRID_STEP), curPos[1]);
@@ -250,7 +255,7 @@ export default function EventsSnakeGrid({
     return () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
-  }, [lineColor, history, snakeProgress, columns, cellSize, gap]);
+  }, [lineColor, history, columns, cellSize, gap]);
 
   return (
     <>
@@ -259,7 +264,7 @@ export default function EventsSnakeGrid({
         // just like above, subtract 1 grid gap because each step includes a gap,
         // we just need to remove the last gap
         width={GRID_STEP * columns - gap}
-        height={GRID_STEP * grid.length - gap}
+        height={GRID_STEP * areas.length - gap}
         style={{
           position: "absolute",
           zIndex: -1,
@@ -269,7 +274,7 @@ export default function EventsSnakeGrid({
         className="events__grid"
         style={{
           display: "grid",
-          gridTemplateAreas: areas,
+          gridTemplateAreas: areas.join(" "),
           gridAutoColumns: cellSize,
           gridAutoRows: cellSize,
           gap: gap,
