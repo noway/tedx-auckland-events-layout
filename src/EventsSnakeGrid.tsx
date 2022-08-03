@@ -211,16 +211,13 @@ export default function EventsSnakeGrid({
   // constants
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { history, areas } = getGridTemplate(columns, items);
-
   useEffect(() => {
     const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
-    drawCanvasSnake({cellSize, columns, gap, ctx, lineColor, history});
+    drawCanvasSnake({canvas, cellSize, columns, gap, lineColor, history});
     return () => {
-      clearCanvasSnake(ctx, canvas);
+      clearCanvasSnake({canvas});
     };
   }, [lineColor, history, columns, cellSize, gap]);
-
   return (
     <>
       <canvas
@@ -265,11 +262,13 @@ export default function EventsSnakeGrid({
   );
 }
 
-function clearCanvasSnake(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
+function clearCanvasSnake({canvas}: {canvas: HTMLCanvasElement}) {
+  const ctx = canvas.getContext("2d")!;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function drawCanvasSnake({cellSize, columns, gap, ctx, lineColor, history}: {cellSize: number, columns: number, gap: number, ctx: CanvasRenderingContext2D, lineColor: string, history: SnakeDirection[]}) {
+function drawCanvasSnake({canvas, cellSize, columns, gap, lineColor, history}: {canvas: HTMLCanvasElement, cellSize: number, columns: number, gap: number, lineColor: string, history: SnakeDirection[]}) {
+  const ctx = canvas.getContext("2d")!;
   const GRID_STEP = cellSize + gap;
   const GRID_HALF_CELL = cellSize / 2;
   let curPos: [number, number] = [cellSize / 2, cellSize / 2];
