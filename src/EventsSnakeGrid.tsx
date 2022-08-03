@@ -35,7 +35,7 @@ function strip(grid: Cell[][]) {
   if (lastRow.every((cell) => cell === null)) {
     return grid.slice(0, -1);
   }
-  return grid
+  return grid;
 }
 
 function findEmptyCell(
@@ -187,28 +187,41 @@ function getGridTemplate(columns: number, items: Item[]) {
     }
   }
 
-  const areas = strip(grid)
-    .map((gridLine) => {
-      const line = gridLine
-        .map((cell) => {
-          if (cell === null) {
-            return ".";
-          }
-          return `item-${cell}`;
-        })
-        .join(" ");
-      return `'${line}'`;
-    })
+  const areas = strip(grid).map((gridLine) => {
+    const line = gridLine
+      .map((cell) => {
+        if (cell === null) {
+          return ".";
+        }
+        return `item-${cell}`;
+      })
+      .join(" ");
+    return `'${line}'`;
+  });
 
   return { history: snakeProgress.history, areas };
 }
 
-function clearCanvasSnake({canvas}: {canvas: HTMLCanvasElement}) {
+function clearCanvasSnake({ canvas }: { canvas: HTMLCanvasElement }) {
   const ctx = canvas.getContext("2d")!;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function drawCanvasSnake({canvas, cellSize, columns, gap, lineColor, history}: {canvas: HTMLCanvasElement, cellSize: number, columns: number, gap: number, lineColor: string, history: SnakeDirection[]}) {
+function drawCanvasSnake({
+  canvas,
+  cellSize,
+  columns,
+  gap,
+  lineColor,
+  history,
+}: {
+  canvas: HTMLCanvasElement;
+  cellSize: number;
+  columns: number;
+  gap: number;
+  lineColor: string;
+  history: SnakeDirection[];
+}) {
   const ctx = canvas.getContext("2d")!;
   const GRID_STEP = cellSize + gap;
   const GRID_HALF_CELL = cellSize / 2;
@@ -256,9 +269,9 @@ export default function EventsSnakeGrid({
   const { history, areas } = getGridTemplate(columns, items);
   useEffect(() => {
     const canvas = canvasRef.current!;
-    drawCanvasSnake({canvas, cellSize, columns, gap, lineColor, history});
+    drawCanvasSnake({ canvas, cellSize, columns, gap, lineColor, history });
     return () => {
-      clearCanvasSnake({canvas});
+      clearCanvasSnake({ canvas });
     };
   }, [lineColor, history, columns, cellSize, gap]);
   return (
