@@ -103,6 +103,7 @@ function findEmptyCell(
     commitStep();
     break; // found empty cell - stop
   } while (true);
+  // TODO: add circuit breaker
 
   return {
     column,
@@ -131,6 +132,7 @@ function fillBigItem(
   while (
     grid[snakeProgress.row][snakeProgress.column + directionSign] !== null
   ) {
+    // TODO: add circuit breaker
     snakeProgress = findEmptyCell(grid, snakeProgress);
   }
 
