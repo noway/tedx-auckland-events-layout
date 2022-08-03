@@ -208,52 +208,16 @@ export default function EventsSnakeGrid({
   columns = 4,
   gap = 25,
 }: Props) {
-  // derived constants
-  const GRID_STEP = cellSize + gap;
-  const GRID_HALF_CELL = cellSize / 2;
-
   // constants
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  // mutable variables
   const { history, areas } = getGridTemplate(columns, items);
 
   useEffect(() => {
     const canvas = canvasRef.current!;
     const ctx = canvas.getContext("2d")!;
-    let curPos: [number, number] = [cellSize / 2, cellSize / 2];
-
-    function clamp(num: number) {
-      // 1 grid gap here because each step includes a gap, we just need to remove the last gap
-      return Math.max(
-        Math.min(num, GRID_STEP * columns - cellSize / 2 - gap),
-        GRID_HALF_CELL
-      );
-    }
-
-    ctx.beginPath();
-    ctx.strokeStyle = lineColor;
-    for (const instruction of history) {
-      if (instruction === "left") {
-        ctx.moveTo(...curPos);
-        ctx.lineTo(clamp(curPos[0] - GRID_STEP), curPos[1]);
-        curPos = [clamp(curPos[0] - GRID_STEP), curPos[1]];
-      }
-      if (instruction === "right") {
-        ctx.moveTo(...curPos);
-        ctx.lineTo(clamp(curPos[0] + GRID_STEP), curPos[1]);
-        curPos = [clamp(curPos[0] + GRID_STEP), curPos[1]];
-      }
-      if (instruction === "down") {
-        ctx.moveTo(curPos[0], curPos[1]);
-        ctx.lineTo(curPos[0], curPos[1] + GRID_STEP);
-        curPos = [curPos[0], curPos[1] + GRID_STEP];
-      }
-    }
-    ctx.stroke();
-
+    drawCanvasSnake({cellSize, columns, gap, ctx, lineColor, history});
     return () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      clearCanvasSnake(ctx, canvas);
     };
   }, [lineColor, history, columns, cellSize, gap]);
 
@@ -263,8 +227,8 @@ export default function EventsSnakeGrid({
         ref={canvasRef}
         // just like above, subtract 1 grid gap because each step includes a gap,
         // we just need to remove the last gap
-        width={GRID_STEP * columns - gap}
-        height={GRID_STEP * areas.length - gap}
+        width={cellSize * columns + gap * (columns - 1)}
+        height={cellSize * areas.length + gap * (areas.length - 1)}
         style={{
           position: "absolute",
           zIndex: -1,
@@ -300,3 +264,43 @@ export default function EventsSnakeGrid({
     </>
   );
 }
+
+function clearCanvasSnake(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawCanvasSnake({cellSize, columns, gap, ctx, lineColor, history}: {cellSize: number, columns: number, gap: number, ctx: CanvasRenderingContext2D, lineColor: string, history: SnakeDirection[]}) {
+  const GRID_STEP = cellSize + gap;
+  const GRID_HALF_CELL = cellSize / 2;
+  let curPos: [number, number] = [cellSize / 2, cellSize / 2];
+
+  function clamp(num: number) {
+    // 1 grid gap here because each step includes a gap, we just need to remove the last gap
+    return Math.max(
+      Math.min(num, GRID_STEP * columns - cellSize / 2 - gap),
+      GRID_HALF_CELL
+    );
+  }
+
+  ctx.beginPath();
+  ctx.strokeStyle = lineColor;
+  for (const instruction of history) {
+    if (instruction === "left") {
+      ctx.moveTo(...curPos);
+      ctx.lineTo(clamp(curPos[0] - GRID_STEP), curPos[1]);
+      curPos = [clamp(curPos[0] - GRID_STEP), curPos[1]];
+    }
+    if (instruction === "right") {
+      ctx.moveTo(...curPos);
+      ctx.lineTo(clamp(curPos[0] + GRID_STEP), curPos[1]);
+      curPos = [clamp(curPos[0] + GRID_STEP), curPos[1]];
+    }
+    if (instruction === "down") {
+      ctx.moveTo(curPos[0], curPos[1]);
+      ctx.lineTo(curPos[0], curPos[1] + GRID_STEP);
+      curPos = [curPos[0], curPos[1] + GRID_STEP];
+    }
+  }
+  ctx.stroke();
+}
+
