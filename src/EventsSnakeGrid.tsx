@@ -235,6 +235,10 @@ function getGridTemplateSimple(columns: number, items: Item[]) {
     }
   }
 
+  function directionSign() {
+    return snakeProgress.direction === "right" ? 1 : -1;
+  }
+
   for (const item of items) {
     if (item.isBig) {
       if (snakeProgress.direction === "right") {
@@ -251,11 +255,10 @@ function getGridTemplateSimple(columns: number, items: Item[]) {
         }
       }
 
-      const directionSign = snakeProgress.direction === "right" ? 1 : -1;
       grid[snakeProgress.row][snakeProgress.column] = item.id;
-      grid[snakeProgress.row][snakeProgress.column + directionSign] = item.id;
+      grid[snakeProgress.row][snakeProgress.column + directionSign()] = item.id;
       grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
-      grid[snakeProgress.row + 1][snakeProgress.column + directionSign] =
+      grid[snakeProgress.row + 1][snakeProgress.column + directionSign()] =
         item.id;
       goForward();
       goForward();
