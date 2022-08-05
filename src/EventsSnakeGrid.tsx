@@ -188,19 +188,7 @@ function getGridTemplateRecursive(columns: number, items: Item[]) {
     }
   }
 
-  const areas = strip(grid).map((gridLine) => {
-    const line = gridLine
-      .map((cell) => {
-        if (cell === null) {
-          return ".";
-        }
-        return `item-${cell}`;
-      })
-      .join(" ");
-    return `'${line}'`;
-  });
-
-  return { history: snakeProgress.history, areas };
+  return { history: snakeProgress.history, areas: getAreas(grid) };
 }
 
 function getGridTemplateSimple(columns: number, items: Item[]) {
@@ -270,7 +258,11 @@ function getGridTemplateSimple(columns: number, items: Item[]) {
     }
   }
 
-  const areas = strip(grid).map((gridLine) => {
+  return { history: snakeProgress.history, areas: getAreas(grid) };
+}
+
+function getAreas(grid: Cell[][]) {
+  return strip(grid).map((gridLine) => {
     const line = gridLine
       .map((cell) => {
         if (cell === null) {
@@ -281,9 +273,9 @@ function getGridTemplateSimple(columns: number, items: Item[]) {
       .join(" ");
     return `'${line}'`;
   });
-
-  return { history: snakeProgress.history, areas };
 }
+
+// TODO: function which tests if the grid is valid or corrupted
 
 function clearCanvasSnake({ canvas }: { canvas: HTMLCanvasElement }) {
   const ctx = canvas.getContext("2d")!;
