@@ -149,7 +149,7 @@ function fillBigItem(
   };
 }
 
-function getGridTemplate(columns: number, items: Item[]) {
+function getGridTemplateComplicated(columns: number, items: Item[]) {
   let grid: Cell[][] = Array(2)
     .fill(undefined)
     .map(() => Array(columns).fill(null));
@@ -198,6 +198,111 @@ function getGridTemplate(columns: number, items: Item[]) {
       .join(" ");
     return `'${line}'`;
   });
+
+  return { history: snakeProgress.history, areas };
+}
+function getGridTemplate(columns: number, items: Item[]) {
+  let grid: Cell[][] = Array(40)
+    .fill(undefined)
+    .map(() => Array(columns).fill(null));
+  let snakeProgress: SnakeProgress = {
+    row: 0,
+    column: 0,
+    direction: "right",
+    history: [],
+  };
+
+  for (const item of items) {
+    if (item.isBig) {
+      if (snakeProgress.direction === "right") {
+        if (snakeProgress.column + 1 <= columns - 1) {
+          // pass
+        } else {
+          snakeProgress.row += 2;
+          snakeProgress.column = columns - 1;
+          snakeProgress.direction = invertDirection(snakeProgress.direction);
+          snakeProgress.history.push("down", "down")
+        }
+      } else {
+        if (snakeProgress.column - 1 >= 0) {
+          // pass
+        } else {
+          snakeProgress.row += 2;
+          snakeProgress.column = 0;
+          snakeProgress.direction = invertDirection(snakeProgress.direction);
+          snakeProgress.history.push("down", "down")
+        }
+      }
+
+      const directionSign = snakeProgress.direction === "right" ? 1 : -1;
+      grid[snakeProgress.row][snakeProgress.column] = item.id;
+      grid[snakeProgress.row][snakeProgress.column + directionSign] = item.id;
+      grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
+      grid[snakeProgress.row + 1][snakeProgress.column + directionSign] = item.id;
+      snakeProgress.column += 2 * directionSign;
+      snakeProgress.history.push(snakeProgress.direction, snakeProgress.direction)
+
+      if (snakeProgress.direction === "right") {
+        if (snakeProgress.column > columns - 1) {
+          snakeProgress.row += 2;
+          snakeProgress.history.push("down", "down")
+          snakeProgress.column = columns - 1;
+          snakeProgress.direction = invertDirection(snakeProgress.direction);
+          console.log('here',snakeProgress.row, snakeProgress.column)
+        }
+      }
+      else {
+        if (snakeProgress.column < 0) {
+          snakeProgress.row += 2;
+          snakeProgress.history.push("down", "down")
+
+          snakeProgress.column = 0;
+          snakeProgress.direction = invertDirection(snakeProgress.direction);
+        }
+      }
+
+      
+    } else {
+      console.log('item.id',item.id,snakeProgress.row, snakeProgress.column)
+      grid[snakeProgress.row][snakeProgress.column] = item.id;
+
+      if (snakeProgress.direction === "right") {
+        snakeProgress.column++;
+        snakeProgress.history.push("right")
+        if (snakeProgress.column > columns - 1) {
+          snakeProgress.row += 2;
+          snakeProgress.history.push("down", "down")
+          snakeProgress.column = columns - 1;
+          snakeProgress.direction = invertDirection(snakeProgress.direction);
+          console.log('here',snakeProgress.row, snakeProgress.column)
+        }
+      }
+      else {
+        snakeProgress.column--;
+        snakeProgress.history.push("left")
+        if (snakeProgress.column < 0) {
+          snakeProgress.row += 2;
+          snakeProgress.history.push("down", "down")
+
+          snakeProgress.column = 0;
+          snakeProgress.direction = invertDirection(snakeProgress.direction);
+        }
+      }
+    }
+  }
+
+  const areas = strip(grid).map((gridLine) => {
+    const line = gridLine
+      .map((cell) => {
+        if (cell === null) {
+          return ".";
+        }
+        return `item-${cell}`;
+      })
+      .join(" ");
+    return `'${line}'`;
+  });
+  console.log('areas',areas);
 
   return { history: snakeProgress.history, areas };
 }
