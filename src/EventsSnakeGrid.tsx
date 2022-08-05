@@ -218,18 +218,33 @@ function getGridTemplate(columns: number, items: Item[]) {
     snakeProgress.direction = invertDirection(snakeProgress.direction);
     snakeProgress.history.push("down", "down")
   }
+  
+  function goForward() {
+    snakeProgress.column += snakeProgress.direction === "right" ? 1 : -1;
+    snakeProgress.history.push(snakeProgress.direction);
+    if (snakeProgress.direction === "right") {
+      if (snakeProgress.column > columns - 1) {
+        downAndInvert(columns - 1);
+      }
+    }
+    else {
+      if (snakeProgress.column < 0) {
+        downAndInvert(0);
+      }
+    }
+  }
 
   for (const item of items) {
     if (item.isBig) {
       if (snakeProgress.direction === "right") {
         if (snakeProgress.column + 1 <= columns - 1) {
-          // pass
+          // will be enough space to fill the big item
         } else {
           downAndInvert(columns - 1);
         }
       } else {
         if (snakeProgress.column - 1 >= 0) {
-          // pass
+          // will be enough space to fill the big item
         } else {
           downAndInvert(0);
         }
@@ -240,39 +255,11 @@ function getGridTemplate(columns: number, items: Item[]) {
       grid[snakeProgress.row][snakeProgress.column + directionSign] = item.id;
       grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
       grid[snakeProgress.row + 1][snakeProgress.column + directionSign] = item.id;
-      snakeProgress.column += 2 * directionSign;
-      snakeProgress.history.push(snakeProgress.direction, snakeProgress.direction)
-
-      if (snakeProgress.direction === "right") {
-        if (snakeProgress.column > columns - 1) {
-          downAndInvert(columns - 1);
-        }
-      }
-      else {
-        if (snakeProgress.column < 0) {
-          downAndInvert(0);
-        }
-      }
-
-      
+      goForward()
+      goForward()      
     } else {
-      console.log('item.id',item.id,snakeProgress.row, snakeProgress.column)
       grid[snakeProgress.row][snakeProgress.column] = item.id;
-
-      if (snakeProgress.direction === "right") {
-        snakeProgress.column++;
-        snakeProgress.history.push("right")
-        if (snakeProgress.column > columns - 1) {
-          downAndInvert(columns - 1);
-        }
-      }
-      else {
-        snakeProgress.column--;
-        snakeProgress.history.push("left")
-        if (snakeProgress.column < 0) {
-          downAndInvert(0);
-        }
-      }
+      goForward()
     }
   }
 
