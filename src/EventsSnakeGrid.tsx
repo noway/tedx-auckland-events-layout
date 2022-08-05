@@ -218,9 +218,9 @@ function getGridTemplateSimple(columns: number, items: Item[]) {
     snakeProgress.row += 2;
     snakeProgress.column = column;
     snakeProgress.direction = invertDirection(snakeProgress.direction);
-    snakeProgress.history.push("down", "down")
+    snakeProgress.history.push("down", "down");
   }
-  
+
   function goForward() {
     snakeProgress.column += snakeProgress.direction === "right" ? 1 : -1;
     snakeProgress.history.push(snakeProgress.direction);
@@ -228,8 +228,7 @@ function getGridTemplateSimple(columns: number, items: Item[]) {
       if (snakeProgress.column > columns - 1) {
         downAndInvert(columns - 1);
       }
-    }
-    else {
+    } else {
       if (snakeProgress.column < 0) {
         downAndInvert(0);
       }
@@ -256,12 +255,13 @@ function getGridTemplateSimple(columns: number, items: Item[]) {
       grid[snakeProgress.row][snakeProgress.column] = item.id;
       grid[snakeProgress.row][snakeProgress.column + directionSign] = item.id;
       grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
-      grid[snakeProgress.row + 1][snakeProgress.column + directionSign] = item.id;
-      goForward()
-      goForward()      
+      grid[snakeProgress.row + 1][snakeProgress.column + directionSign] =
+        item.id;
+      goForward();
+      goForward();
     } else {
       grid[snakeProgress.row][snakeProgress.column] = item.id;
-      goForward()
+      goForward();
     }
   }
 
@@ -341,11 +341,12 @@ export default function EventsSnakeGrid({
   cellSize = 100,
   columns = 4,
   gap = 25,
-  algo = "recursive"
+  algo = "recursive",
 }: Props) {
   // constants
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const func = algo === "recursive" ? getGridTemplateRecursive : getGridTemplateSimple;
+  const func =
+    algo === "recursive" ? getGridTemplateRecursive : getGridTemplateSimple;
   const { history, areas } = func(columns, items);
   useEffect(() => {
     const canvas = canvasRef.current!;
