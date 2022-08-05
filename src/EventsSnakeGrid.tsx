@@ -225,11 +225,11 @@ function getGridTemplateSimple(columns: number, items: Item[]) {
     snakeProgress.column += snakeProgress.direction === "right" ? 1 : -1;
     snakeProgress.history.push(snakeProgress.direction);
     if (snakeProgress.direction === "right") {
-      if (snakeProgress.column > columns - 1) {
+      if (snakeProgress.column > columns - 2) {
         downAndInvert(columns - 1);
       }
     } else {
-      if (snakeProgress.column < 0) {
+      if (snakeProgress.column < 1) {
         downAndInvert(0);
       }
     }
