@@ -212,25 +212,26 @@ function getGridTemplate(columns: number, items: Item[]) {
     history: [],
   };
 
+  function downAndInvert(column: number) {
+    snakeProgress.row += 2;
+    snakeProgress.column = column;
+    snakeProgress.direction = invertDirection(snakeProgress.direction);
+    snakeProgress.history.push("down", "down")
+  }
+
   for (const item of items) {
     if (item.isBig) {
       if (snakeProgress.direction === "right") {
         if (snakeProgress.column + 1 <= columns - 1) {
           // pass
         } else {
-          snakeProgress.row += 2;
-          snakeProgress.column = columns - 1;
-          snakeProgress.direction = invertDirection(snakeProgress.direction);
-          snakeProgress.history.push("down", "down")
+          downAndInvert(columns - 1);
         }
       } else {
         if (snakeProgress.column - 1 >= 0) {
           // pass
         } else {
-          snakeProgress.row += 2;
-          snakeProgress.column = 0;
-          snakeProgress.direction = invertDirection(snakeProgress.direction);
-          snakeProgress.history.push("down", "down")
+          downAndInvert(0);
         }
       }
 
@@ -244,20 +245,12 @@ function getGridTemplate(columns: number, items: Item[]) {
 
       if (snakeProgress.direction === "right") {
         if (snakeProgress.column > columns - 1) {
-          snakeProgress.row += 2;
-          snakeProgress.history.push("down", "down")
-          snakeProgress.column = columns - 1;
-          snakeProgress.direction = invertDirection(snakeProgress.direction);
-          console.log('here',snakeProgress.row, snakeProgress.column)
+          downAndInvert(columns - 1);
         }
       }
       else {
         if (snakeProgress.column < 0) {
-          snakeProgress.row += 2;
-          snakeProgress.history.push("down", "down")
-
-          snakeProgress.column = 0;
-          snakeProgress.direction = invertDirection(snakeProgress.direction);
+          downAndInvert(0);
         }
       }
 
@@ -270,22 +263,14 @@ function getGridTemplate(columns: number, items: Item[]) {
         snakeProgress.column++;
         snakeProgress.history.push("right")
         if (snakeProgress.column > columns - 1) {
-          snakeProgress.row += 2;
-          snakeProgress.history.push("down", "down")
-          snakeProgress.column = columns - 1;
-          snakeProgress.direction = invertDirection(snakeProgress.direction);
-          console.log('here',snakeProgress.row, snakeProgress.column)
+          downAndInvert(columns - 1);
         }
       }
       else {
         snakeProgress.column--;
         snakeProgress.history.push("left")
         if (snakeProgress.column < 0) {
-          snakeProgress.row += 2;
-          snakeProgress.history.push("down", "down")
-
-          snakeProgress.column = 0;
-          snakeProgress.direction = invertDirection(snakeProgress.direction);
+          downAndInvert(0);
         }
       }
     }
