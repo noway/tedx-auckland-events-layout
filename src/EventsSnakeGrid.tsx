@@ -24,6 +24,7 @@ interface Props {
   cellSize?: number;
   columns?: number;
   gap?: number;
+  algo?: "recursive" | "simple";
 }
 
 function invertDirection(dir: Direction) {
@@ -149,7 +150,7 @@ function fillBigItem(
   };
 }
 
-function getGridTemplateComplicated(columns: number, items: Item[]) {
+function getGridTemplateRecursive(columns: number, items: Item[]) {
   let grid: Cell[][] = Array(2)
     .fill(undefined)
     .map(() => Array(columns).fill(null));
@@ -201,7 +202,8 @@ function getGridTemplateComplicated(columns: number, items: Item[]) {
 
   return { history: snakeProgress.history, areas };
 }
-function getGridTemplate(columns: number, items: Item[]) {
+
+function getGridTemplateSimple(columns: number, items: Item[]) {
   let grid: Cell[][] = Array(40)
     .fill(undefined)
     .map(() => Array(columns).fill(null));
@@ -339,10 +341,12 @@ export default function EventsSnakeGrid({
   cellSize = 100,
   columns = 4,
   gap = 25,
+  algo = "recursive"
 }: Props) {
   // constants
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { history, areas } = getGridTemplate(columns, items);
+  const func = algo === "recursive" ? getGridTemplateRecursive : getGridTemplateSimple;
+  const { history, areas } = func(columns, items);
   useEffect(() => {
     const canvas = canvasRef.current!;
     drawCanvasSnake({ canvas, cellSize, columns, gap, lineColor, history });

@@ -35,8 +35,9 @@ export default function App() {
   const [columns, setColumns] = useState(4);
   const [gap, setGap] = useState(25);
   const [count, setCount] = useState(16);
-  const [seed, setSeed] = useState<number | null>(null)
+  const [seed, setSeed] = useState<number | null>(null);
   const items = seed ? generateItems(seed, count) : defaultItems;
+  const [recursiveAlgo, setRecursiveAlgo] = useState(false);
 
   return (
     <div>
@@ -70,6 +71,17 @@ export default function App() {
         onChange={(e) => setCount(Number(e.target.value))}
         disabled={seed === null}
       />
+      <input
+        type="checkbox"
+        checked={recursiveAlgo}
+        onChange={(e) => {
+          if (e.target.checked) {
+            setRecursiveAlgo(true);
+          } else {
+            setRecursiveAlgo(false);
+          }
+        }}
+      />
       <br />
       <br />
       <EventsSnakeGrid
@@ -78,6 +90,7 @@ export default function App() {
         cellSize={cellSize}
         columns={columns}
         gap={gap}
+        algo={recursiveAlgo ? "recursive" : "simple"}
       />
     </div>
   );
