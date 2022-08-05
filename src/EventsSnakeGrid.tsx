@@ -204,7 +204,7 @@ function getGridTemplateRecursive(columns: number, items: Item[]) {
 }
 
 function getGridTemplateSimple(columns: number, items: Item[]) {
-  let grid: Cell[][] = Array(40)
+  let grid: Cell[][] = Array(2)
     .fill(undefined)
     .map(() => Array(columns).fill(null));
   let snakeProgress: SnakeProgress = {
@@ -215,6 +215,8 @@ function getGridTemplateSimple(columns: number, items: Item[]) {
   };
 
   function downAndInvert(column: number) {
+    grid.push(Array(columns).fill(null));
+    grid.push(Array(columns).fill(null));
     snakeProgress.row += 2;
     snakeProgress.column = column;
     snakeProgress.direction = invertDirection(snakeProgress.direction);
