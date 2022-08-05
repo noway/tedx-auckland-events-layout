@@ -274,7 +274,6 @@ function getGridTemplate(columns: number, items: Item[]) {
       .join(" ");
     return `'${line}'`;
   });
-  console.log('areas',areas);
 
   return { history: snakeProgress.history, areas };
 }
