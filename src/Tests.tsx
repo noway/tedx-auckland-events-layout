@@ -9,6 +9,7 @@ import {
   generateGridHybrid,
 } from "./snakeGrid";
 
+// TODO: make non-blocking
 export default function Tests() {
   return (
     <>
