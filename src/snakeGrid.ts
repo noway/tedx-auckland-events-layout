@@ -134,11 +134,13 @@ function fillBigItem(
   snakeProgress: SnakeProgress,
   item: Item
 ): SnakeProgress {
-  const directionSign = snakeProgress.direction === "right" ? 1 : -1;
+  function directionSign() {
+    return snakeProgress.direction === "right" ? 1 : -1;
+  }
 
   // if the adjacent cell is not empty, keep looking
   while (
-    grid[snakeProgress.row][snakeProgress.column + directionSign] !== null
+    grid[snakeProgress.row][snakeProgress.column + directionSign()] !== null
   ) {
     // TODO: add circuit breaker
     snakeProgress = findEmptyCell(grid, snakeProgress);
@@ -146,13 +148,13 @@ function fillBigItem(
 
   // fill the 4 cells
   grid[snakeProgress.row][snakeProgress.column] = item.id;
-  grid[snakeProgress.row][snakeProgress.column + directionSign] = item.id;
+  grid[snakeProgress.row][snakeProgress.column + directionSign()] = item.id;
   grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
-  grid[snakeProgress.row + 1][snakeProgress.column + directionSign] = item.id;
+  grid[snakeProgress.row + 1][snakeProgress.column + directionSign()] = item.id;
 
   return {
     ...snakeProgress,
-    column: snakeProgress.column + directionSign,
+    column: snakeProgress.column + directionSign(),
     history: [...snakeProgress.history, snakeProgress.direction],
   };
 }
