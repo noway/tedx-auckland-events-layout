@@ -74,13 +74,7 @@ export default function App() {
       <input
         type="checkbox"
         checked={recursiveAlgo}
-        onChange={(e) => {
-          if (e.target.checked) {
-            setRecursiveAlgo(true);
-          } else {
-            setRecursiveAlgo(false);
-          }
-        }}
+        onChange={(e) => setRecursiveAlgo(e.target.checked)}
       />
       <br />
       <br />
