@@ -1,5 +1,7 @@
 import { random } from "./prng";
 
+const CIRCUIT_BREAKER_ITERATIONS = 3;
+
 export interface Item {
   id: number;
   title: string;
@@ -53,8 +55,14 @@ function findEmptyCell(
   const columns = grid[0].length;
   let { column, row, direction, history } = snakeProgress;
 
+  let iterations = 0;
   // calculating next step
   do {
+    iterations++;
+    if (iterations > CIRCUIT_BREAKER_ITERATIONS) {
+      throw new Error("Could not find empty cell");
+    }
+
     let nextColumn = column;
     let nextRow = row;
     let nextDirection = direction;
@@ -119,7 +127,6 @@ function findEmptyCell(
     commitStep();
     break; // found empty cell - stop
   } while (true);
-  // TODO: add circuit breaker
 
   return {
     column,
@@ -139,10 +146,15 @@ function fillBigItem(
   }
 
   // if the adjacent cell is not empty, keep looking
+  let iterations = 0;
   while (
     grid[snakeProgress.row][snakeProgress.column + directionSign()] !== null
   ) {
-    // TODO: add circuit breaker
+    iterations++;
+    if (iterations > CIRCUIT_BREAKER_ITERATIONS) {
+      throw new Error("Could not find empty cell");
+    }
+
     snakeProgress = findEmptyCell(grid, snakeProgress);
   }
 
