@@ -202,70 +202,67 @@ export function generateGridSimple(columns: number, items: Item[]) {
   let grid: Grid = Array(2)
     .fill(undefined)
     .map(() => Array(columns).fill(null));
-  let snakeProgress: SnakeProgress = {
-    row: 0,
-    column: 0,
-    direction: "right",
-    history: [],
-  };
+  let row = 0;
+  let column = 0;
+  let direction: Direction = "right";
+  let history: SnakeDirection[] = [];
 
   function downAndInvert(column: number) {
     grid.push(Array(columns).fill(null));
     grid.push(Array(columns).fill(null));
-    snakeProgress.row += 2;
-    snakeProgress.column = column;
-    snakeProgress.direction = invertDirection(snakeProgress.direction);
-    snakeProgress.history.push("down", "down");
+    row += 2;
+    column = column;
+    direction = invertDirection(direction);
+    history.push("down", "down");
   }
 
   function goForward() {
-    snakeProgress.column += snakeProgress.direction === "right" ? 1 : -1;
-    snakeProgress.history.push(snakeProgress.direction);
-    if (snakeProgress.direction === "right") {
-      if (snakeProgress.column > columns - 2) {
+    column += direction === "right" ? 1 : -1;
+    history.push(direction);
+    if (direction === "right") {
+      if (column > columns - 2) {
         downAndInvert(columns - 1);
       }
     } else {
-      if (snakeProgress.column < 1) {
+      if (column < 1) {
         downAndInvert(0);
       }
     }
   }
 
   function directionSign() {
-    return snakeProgress.direction === "right" ? 1 : -1;
+    return direction === "right" ? 1 : -1;
   }
 
   for (const item of items) {
     if (item.isBig) {
-      if (snakeProgress.direction === "right") {
-        if (snakeProgress.column + 1 <= columns - 1) {
+      if (direction === "right") {
+        if (column + 1 <= columns - 1) {
           // will be enough space to fill the big item
         } else {
           downAndInvert(columns - 1);
         }
       } else {
-        if (snakeProgress.column - 1 >= 0) {
+        if (column - 1 >= 0) {
           // will be enough space to fill the big item
         } else {
           downAndInvert(0);
         }
       }
 
-      grid[snakeProgress.row][snakeProgress.column] = item.id;
-      grid[snakeProgress.row][snakeProgress.column + directionSign()] = item.id;
-      grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
-      grid[snakeProgress.row + 1][snakeProgress.column + directionSign()] =
-        item.id;
+      grid[row][column] = item.id;
+      grid[row][column + directionSign()] = item.id;
+      grid[row + 1][column] = item.id;
+      grid[row + 1][column + directionSign()] = item.id;
       goForward();
       goForward();
     } else {
-      grid[snakeProgress.row][snakeProgress.column] = item.id;
+      grid[row][column] = item.id;
       goForward();
     }
   }
 
-  return { history: snakeProgress.history, grid };
+  return { history, grid };
 }
 
 // TODO: hybrid function which tries recursive and then simple algorithm
