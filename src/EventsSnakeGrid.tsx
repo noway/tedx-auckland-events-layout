@@ -364,7 +364,6 @@ export default function EventsSnakeGrid({
   }, [lineColor, history, columns, cellSize, gap]);
   return (
     <>
-      <div>Valid: {isAreasValid(areas) ? "true" : "false"}</div>
       <canvas
         ref={canvasRef}
         // just like above, subtract 1 grid gap because each step includes a gap,
