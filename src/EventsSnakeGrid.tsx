@@ -27,6 +27,14 @@ interface Props {
   algo?: "recursive" | "simple";
 }
 
+function isAreaValid(areas: string[]) {
+  const el = document.createElement("div");
+  el.style.gridTemplateAreas = areas.join(" ");
+  const valid = el.style.length == 1;
+  el.remove();
+  return valid;
+}
+
 function invertDirection(dir: Direction) {
   return dir === "right" ? "left" : "right";
 }
@@ -275,8 +283,6 @@ function getAreas(grid: Cell[][]) {
   });
 }
 
-// TODO: function which tests if the grid is valid or corrupted
-
 function clearCanvasSnake({ canvas }: { canvas: HTMLCanvasElement }) {
   const ctx = canvas.getContext("2d")!;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -354,6 +360,7 @@ export default function EventsSnakeGrid({
   }, [lineColor, history, columns, cellSize, gap]);
   return (
     <>
+      <div>Valid: {isAreaValid(areas) ? "true" : "false"}</div>
       <canvas
         ref={canvasRef}
         // just like above, subtract 1 grid gap because each step includes a gap,
