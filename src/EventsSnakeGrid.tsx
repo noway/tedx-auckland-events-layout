@@ -27,7 +27,7 @@ interface Props {
   algo?: "recursive" | "simple";
 }
 
-function isAreasValid(areas: string[]) {
+export function isAreasValid(areas: string[]) {
   const el = document.createElement("div");
   el.style.gridTemplateAreas = areas.join(" ");
   const valid = el.style.length == 1;
@@ -158,7 +158,7 @@ function fillBigItem(
   };
 }
 
-function getGridTemplateRecursive(columns: number, items: Item[]) {
+export function getGridTemplateRecursive(columns: number, items: Item[]) {
   let grid: Cell[][] = Array(2)
     .fill(undefined)
     .map(() => Array(columns).fill(null));
@@ -199,7 +199,7 @@ function getGridTemplateRecursive(columns: number, items: Item[]) {
   return { history: snakeProgress.history, areas: getAreas(grid) };
 }
 
-function getGridTemplateSimple(columns: number, items: Item[]) {
+export function getGridTemplateSimple(columns: number, items: Item[]) {
   let grid: Cell[][] = Array(2)
     .fill(undefined)
     .map(() => Array(columns).fill(null));

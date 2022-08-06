@@ -21,7 +21,8 @@ const defaultItems = [
   { id: 15, title: "15", isBig: false },
 ];
 
-function generateItems(seed: number, count: number) {
+// TODO: put in a separate file?
+export function generateItems(seed: number, count: number) {
   const items = [];
   for (let i = 0; i < count; i++) {
     items.push({ id: i, title: i.toString(), isBig: random(i, seed) > 0.7 });
