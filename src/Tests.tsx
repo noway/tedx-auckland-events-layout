@@ -64,8 +64,10 @@ function RandomItemsAreasValidTest(props: {
   const itemCount = 256;
   let validCount = 0;
   for (let i = 0; i < total; i++) {
-    const template = func(columns, generateItems(i, itemCount));
-    if (isAreasValid(template.areas)) {
+    const items = generateItems(i, itemCount);
+    const template = func(columns, items);
+    const valid = isAreasValid(template.areas);
+    if (valid) {
       validCount++;
     }
   }
