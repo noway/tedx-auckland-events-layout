@@ -1,6 +1,6 @@
 import { useState } from "react";
 import EventsSnakeGrid from "./EventsSnakeGrid";
-import { random } from "./prng";
+import { generateItems } from "./snakeGrid";
 import { useColorScheme } from "./useColorScheme";
 
 const defaultItems = [
@@ -20,15 +20,6 @@ const defaultItems = [
   { id: 14, title: "14", isBig: false },
   { id: 15, title: "15", isBig: false },
 ];
-
-// TODO: put in a separate file?
-export function generateItems(seed: number, count: number) {
-  const items = [];
-  for (let i = 0; i < count; i++) {
-    items.push({ id: i, title: i.toString(), isBig: random(i, seed) > 0.7 });
-  }
-  return items;
-}
 
 export default function Demo() {
   const colorScheme = useColorScheme();

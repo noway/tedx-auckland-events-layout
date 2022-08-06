@@ -1,11 +1,10 @@
-// TODO: put in a separate file?
-import { generateItems } from "./Demo";
 import {
+  generateItems,
   getGridTemplateRecursive,
   getGridTemplateSimple,
   isAreasValid,
   Item,
-} from "./EventsSnakeGrid";
+} from "./snakeGrid";
 
 export default function Tests() {
   return (
