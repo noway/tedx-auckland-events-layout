@@ -27,7 +27,7 @@ interface Props {
   algo?: "recursive" | "simple";
 }
 
-function isAreaValid(areas: string[]) {
+function isAreasValid(areas: string[]) {
   const el = document.createElement("div");
   el.style.gridTemplateAreas = areas.join(" ");
   const valid = el.style.length == 1;
@@ -360,7 +360,7 @@ export default function EventsSnakeGrid({
   }, [lineColor, history, columns, cellSize, gap]);
   return (
     <>
-      <div>Valid: {isAreaValid(areas) ? "true" : "false"}</div>
+      <div>Valid: {isAreasValid(areas) ? "true" : "false"}</div>
       <canvas
         ref={canvasRef}
         // just like above, subtract 1 grid gap because each step includes a gap,
