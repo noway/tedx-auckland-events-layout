@@ -158,9 +158,7 @@ function fillBigItem(
 }
 
 export function generateGridRecursive(columns: number, items: Item[]) {
-  let grid: Grid = Array(2)
-    .fill(undefined)
-    .map(() => Array(columns).fill(null));
+  let grid: Grid = [...Array(2).keys()].map(() => Array(columns).fill(null));
   let snakeProgress: SnakeProgress = {
     row: 0,
     column: 0,
@@ -199,9 +197,7 @@ export function generateGridRecursive(columns: number, items: Item[]) {
 }
 
 export function generateGridSimple(columns: number, items: Item[]) {
-  let grid: Grid = Array(2)
-    .fill(undefined)
-    .map(() => Array(columns).fill(null));
+  let grid: Grid = [...Array(2).keys()].map(() => Array(columns).fill(null));
   let row = 0;
   let column = 0;
   let direction: Direction = "right";
