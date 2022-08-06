@@ -10,20 +10,20 @@ import {
 export default function Tests() {
   return (
     <>
-      <RandomItemsTest columns={2} func={getGridTemplateSimple} />
-      <RandomItemsTest columns={4} func={getGridTemplateSimple} />
-      <RandomItemsTest columns={8} func={getGridTemplateSimple} />
-      <RandomItemsTest columns={16} func={getGridTemplateSimple} />
-      <RandomItemsTest columns={2} func={getGridTemplateRecursive} />
-      <RandomItemsTest columns={4} func={getGridTemplateRecursive} />
-      <RandomItemsTest columns={8} func={getGridTemplateRecursive} />
-      <RandomItemsTest columns={16} func={getGridTemplateRecursive} />
+      <RandomItemsAreasValidTest columns={2} func={getGridTemplateSimple} name="getGridTemplateSimple" />
+      <RandomItemsAreasValidTest columns={4} func={getGridTemplateSimple} name="getGridTemplateSimple" />
+      <RandomItemsAreasValidTest columns={8} func={getGridTemplateSimple} name="getGridTemplateSimple" />
+      <RandomItemsAreasValidTest columns={16} func={getGridTemplateSimple} name="getGridTemplateSimple" />
+      <RandomItemsAreasValidTest columns={2} func={getGridTemplateRecursive} name="getGridTemplateRecursive" />
+      <RandomItemsAreasValidTest columns={4} func={getGridTemplateRecursive} name="getGridTemplateRecursive" />
+      <RandomItemsAreasValidTest columns={8} func={getGridTemplateRecursive} name="getGridTemplateRecursive" />
+      <RandomItemsAreasValidTest columns={16} func={getGridTemplateRecursive} name="getGridTemplateRecursive" />
     </>
   );
 }
 
-function RandomItemsTest(props: { columns: number, func: (columns: number, items: Item[]) => { areas: string[] } }) {
-  const { columns, func } = props;
+function RandomItemsAreasValidTest(props: { columns: number, func: (columns: number, items: Item[]) => { areas: string[] }, name: string }) {
+  const { columns, func, name } = props;
   const total = 256;
   const itemCount = 256;
   let validCount = 0;
@@ -36,9 +36,10 @@ function RandomItemsTest(props: { columns: number, func: (columns: number, items
       validCount++;
     }
   }
+  const ok = validCount === total ;
   return (
     <div>
-      getGridTemplateSimple {columns} columns valid: {validCount}/{total}
+      {name} {columns} columns areas valid: <span style={{ color: ok ? 'green' : 'red' }}>{validCount}/{total} {ok ? "OK" : "FAIL"}</span>
     </div>
   );
 }
