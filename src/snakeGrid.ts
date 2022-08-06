@@ -16,6 +16,7 @@ interface SnakeProgress {
 type Cell = number | null;
 type Direction = "right" | "left";
 type SnakeDirection = Direction | "down";
+export type Grid = Cell[][];
 
 export function generateItems(seed: number, count: number) {
   const items = [];
@@ -37,7 +38,7 @@ function invertDirection(dir: Direction) {
   return dir === "right" ? "left" : "right";
 }
 
-function strip(grid: Cell[][]) {
+function strip(grid: Grid) {
   const lastRow = grid[grid.length - 1];
   if (lastRow.every((cell) => cell === null)) {
     return grid.slice(0, -1);
@@ -46,7 +47,7 @@ function strip(grid: Cell[][]) {
 }
 
 function findEmptyCell(
-  grid: Cell[][],
+  grid: Grid,
   snakeProgress: SnakeProgress
 ): SnakeProgress {
   const columns = grid[0].length;
@@ -129,7 +130,7 @@ function findEmptyCell(
 }
 
 function fillBigItem(
-  grid: Cell[][],
+  grid: Grid,
   snakeProgress: SnakeProgress,
   item: Item
 ): SnakeProgress {
@@ -156,8 +157,8 @@ function fillBigItem(
   };
 }
 
-export function getGridTemplateRecursive(columns: number, items: Item[]) {
-  let grid: Cell[][] = Array(2)
+export function generateGridRecursive(columns: number, items: Item[]) {
+  let grid: Grid = Array(2)
     .fill(undefined)
     .map(() => Array(columns).fill(null));
   let snakeProgress: SnakeProgress = {
@@ -194,12 +195,11 @@ export function getGridTemplateRecursive(columns: number, items: Item[]) {
     }
   }
 
-  return { history: snakeProgress.history, areas: getAreas(grid) };
+  return { history: snakeProgress.history, grid };
 }
 
-// TODO: only return grid from this
-export function getGridTemplateSimple(columns: number, items: Item[]) {
-  let grid: Cell[][] = Array(2)
+export function generateGridSimple(columns: number, items: Item[]) {
+  let grid: Grid = Array(2)
     .fill(undefined)
     .map(() => Array(columns).fill(null));
   let snakeProgress: SnakeProgress = {
@@ -265,12 +265,12 @@ export function getGridTemplateSimple(columns: number, items: Item[]) {
     }
   }
 
-  return { history: snakeProgress.history, areas: getAreas(grid) };
+  return { history: snakeProgress.history, grid };
 }
 
 // TODO: hybrid function which tries recursive and then simple algorithm
 
-function getAreas(grid: Cell[][]) {
+export function getAreas(grid: Grid) {
   return strip(grid).map((gridLine) => {
     const line = gridLine
       .map((cell) => {

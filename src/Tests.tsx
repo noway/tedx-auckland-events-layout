@@ -1,7 +1,9 @@
 import {
   generateItems,
-  getGridTemplateRecursive,
-  getGridTemplateSimple,
+  getAreas,
+  generateGridRecursive,
+  generateGridSimple,
+  Grid,
   isAreasValid,
   Item,
 } from "./snakeGrid";
@@ -11,43 +13,43 @@ export default function Tests() {
     <>
       <RandomItemsAreasValidTest
         columns={2}
-        func={getGridTemplateSimple}
-        name="getGridTemplateSimple"
+        func={generateGridSimple}
+        name="generateGridSimple"
       />
       <RandomItemsAreasValidTest
         columns={4}
-        func={getGridTemplateSimple}
-        name="getGridTemplateSimple"
+        func={generateGridSimple}
+        name="generateGridSimple"
       />
       <RandomItemsAreasValidTest
         columns={8}
-        func={getGridTemplateSimple}
-        name="getGridTemplateSimple"
+        func={generateGridSimple}
+        name="generateGridSimple"
       />
       <RandomItemsAreasValidTest
         columns={16}
-        func={getGridTemplateSimple}
-        name="getGridTemplateSimple"
+        func={generateGridSimple}
+        name="generateGridSimple"
       />
       <RandomItemsAreasValidTest
         columns={2}
-        func={getGridTemplateRecursive}
-        name="getGridTemplateRecursive"
+        func={generateGridRecursive}
+        name="generateGridRecursive"
       />
       <RandomItemsAreasValidTest
         columns={4}
-        func={getGridTemplateRecursive}
-        name="getGridTemplateRecursive"
+        func={generateGridRecursive}
+        name="generateGridRecursive"
       />
       <RandomItemsAreasValidTest
         columns={8}
-        func={getGridTemplateRecursive}
-        name="getGridTemplateRecursive"
+        func={generateGridRecursive}
+        name="generateGridRecursive"
       />
       <RandomItemsAreasValidTest
         columns={16}
-        func={getGridTemplateRecursive}
-        name="getGridTemplateRecursive"
+        func={generateGridRecursive}
+        name="generateGridRecursive"
       />
     </>
   );
@@ -55,7 +57,7 @@ export default function Tests() {
 
 function RandomItemsAreasValidTest(props: {
   columns: number;
-  func: (columns: number, items: Item[]) => { areas: string[] };
+  func: (columns: number, items: Item[]) => { grid: Grid };
   name: string;
 }) {
   const { columns, func, name } = props;
@@ -65,7 +67,8 @@ function RandomItemsAreasValidTest(props: {
   for (let i = 0; i < total; i++) {
     const items = generateItems(i, itemCount);
     const template = func(columns, items);
-    const valid = isAreasValid(template.areas);
+    const areas = getAreas(template.grid);
+    const valid = isAreasValid(areas);
     if (valid) {
       validCount++;
     }

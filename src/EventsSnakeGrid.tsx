@@ -3,8 +3,9 @@ import "./App.css";
 import {
   clearCanvasSnake,
   drawCanvasSnake,
-  getGridTemplateRecursive,
-  getGridTemplateSimple,
+  getAreas,
+  generateGridRecursive,
+  generateGridSimple,
   Item,
 } from "./snakeGrid";
 
@@ -27,8 +28,9 @@ export default function EventsSnakeGrid({
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const func =
-    algo === "recursive" ? getGridTemplateRecursive : getGridTemplateSimple;
-  const { history, areas } = func(columns, items);
+    algo === "recursive" ? generateGridRecursive : generateGridSimple;
+  const { history, grid } = func(columns, items);
+  const areas = getAreas(grid)
   useEffect(() => {
     const canvas = canvasRef.current!;
     drawCanvasSnake({ canvas, cellSize, columns, gap, lineColor, history });
