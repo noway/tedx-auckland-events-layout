@@ -1,7 +1,8 @@
 import { useRef, useEffect } from "react";
 import "./App.css";
 
-interface Item {
+// TODO: separate file?
+export interface Item {
   id: number;
   title: string;
   isBig: boolean;
