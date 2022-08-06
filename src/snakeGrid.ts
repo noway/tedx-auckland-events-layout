@@ -275,7 +275,14 @@ export function generateGridSimple(columns: number, items: Item[]) {
   return { history, grid };
 }
 
-// TODO: hybrid function which tries recursive and then simple algorithm
+export function generateGridHybrid(columns: number, items: Item[]) {
+  try {
+    return generateGridRecursive(columns, items);
+  }
+  catch (e) {
+    return generateGridSimple(columns, items);
+  }
+}
 
 export function getAreas(grid: Grid) {
   return strip(grid).map((gridLine) => {

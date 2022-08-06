@@ -6,11 +6,13 @@ import {
   Grid,
   isAreasValid,
   Item,
+  generateGridHybrid,
 } from "./snakeGrid";
 
 export default function Tests() {
   return (
     <>
+      {/* simple */}
       <RandomItemsAreasValidTest
         columns={2}
         func={generateGridSimple}
@@ -31,6 +33,7 @@ export default function Tests() {
         func={generateGridSimple}
         name="generateGridSimple"
       />
+      {/* recursive */}
       <RandomItemsAreasValidTest
         columns={2}
         func={generateGridRecursive}
@@ -50,6 +53,27 @@ export default function Tests() {
         columns={16}
         func={generateGridRecursive}
         name="generateGridRecursive"
+      />
+      {/* hybrid */}
+      <RandomItemsAreasValidTest
+        columns={2}
+        func={generateGridHybrid}
+        name="generateGridHybrid"
+      />
+      <RandomItemsAreasValidTest
+        columns={4}
+        func={generateGridHybrid}
+        name="generateGridHybrid"
+      />
+      <RandomItemsAreasValidTest
+        columns={8}
+        func={generateGridHybrid}
+        name="generateGridHybrid"
+      />
+      <RandomItemsAreasValidTest
+        columns={16}
+        func={generateGridHybrid}
+        name="generateGridHybrid"
       />
     </>
   );
