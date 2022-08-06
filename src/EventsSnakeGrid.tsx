@@ -200,6 +200,7 @@ export function getGridTemplateRecursive(columns: number, items: Item[]) {
   return { history: snakeProgress.history, areas: getAreas(grid) };
 }
 
+// TODO: only return grid from this
 export function getGridTemplateSimple(columns: number, items: Item[]) {
   let grid: Cell[][] = Array(2)
     .fill(undefined)
@@ -269,6 +270,8 @@ export function getGridTemplateSimple(columns: number, items: Item[]) {
 
   return { history: snakeProgress.history, areas: getAreas(grid) };
 }
+
+// TODO: hybrid function which tries recursive and then simple algorithm
 
 function getAreas(grid: Cell[][]) {
   return strip(grid).map((gridLine) => {
