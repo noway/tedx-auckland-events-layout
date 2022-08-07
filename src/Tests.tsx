@@ -1,4 +1,4 @@
-import { startTransition, useState } from "react";
+import { startTransition, useEffect, useReducer, useState } from "react";
 import {
   generateItems,
   getAreas,
@@ -10,73 +10,57 @@ import {
   generateGridHybrid,
 } from "./snakeGrid";
 
-// TODO: make non-blocking
+const testMatrix = [
+  { columns: 2, func: generateGridSimple, name: "generateGridSimple" },
+  { columns: 4, func: generateGridSimple, name: "generateGridSimple" },
+  { columns: 8, func: generateGridSimple, name: "generateGridSimple" },
+  { columns: 16, func: generateGridSimple, name: "generateGridSimple" },
+  { columns: 2, func: generateGridRecursive, name: "generateGridRecursive" },
+  { columns: 4, func: generateGridRecursive, name: "generateGridRecursive" },
+  { columns: 8, func: generateGridRecursive, name: "generateGridRecursive" },
+  { columns: 16, func: generateGridRecursive, name: "generateGridRecursive" },
+  { columns: 2, func: generateGridHybrid, name: "generateGridHybrid" },
+  { columns: 4, func: generateGridHybrid, name: "generateGridHybrid" },
+  { columns: 8, func: generateGridHybrid, name: "generateGridHybrid" },
+  { columns: 16, func: generateGridHybrid, name: "generateGridHybrid" },
+];
+
+const initialState = { results: [] };
+
+function reducer(
+  state: { results: Result[] },
+  action: { type: "add_result"; result: Result } | { type: "clear_results" }
+) {
+  switch (action.type) {
+    case "add_result":
+      return { results: [...state.results, action.result] };
+    case "clear_results":
+      return { results: [] };
+    default:
+      throw new Error();
+  }
+}
+
 export default function Tests() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    testMatrix.forEach(({ columns, func, name }) => {
+      startTransition(() => {
+        const result = runTest(func, columns);
+        // TODO: save "report"
+        dispatch({ type: "add_result", result });  
+      })
+    });
+    return () => {
+      dispatch({ type: "clear_results" });
+    };
+  }, []);
   return (
     <>
-      {/* simple */}
-      <RandomItemsAreasValidTest
-        columns={2}
-        func={generateGridSimple}
-        name="generateGridSimple"
-      />
-      <RandomItemsAreasValidTest
-        columns={4}
-        func={generateGridSimple}
-        name="generateGridSimple"
-      />
-      <RandomItemsAreasValidTest
-        columns={8}
-        func={generateGridSimple}
-        name="generateGridSimple"
-      />
-      <RandomItemsAreasValidTest
-        columns={16}
-        func={generateGridSimple}
-        name="generateGridSimple"
-      />
-      {/* recursive */}
-      <RandomItemsAreasValidTest
-        columns={2}
-        func={generateGridRecursive}
-        name="generateGridRecursive"
-      />
-      <RandomItemsAreasValidTest
-        columns={4}
-        func={generateGridRecursive}
-        name="generateGridRecursive"
-      />
-      <RandomItemsAreasValidTest
-        columns={8}
-        func={generateGridRecursive}
-        name="generateGridRecursive"
-      />
-      <RandomItemsAreasValidTest
-        columns={16}
-        func={generateGridRecursive}
-        name="generateGridRecursive"
-      />
-      {/* hybrid */}
-      <RandomItemsAreasValidTest
-        columns={2}
-        func={generateGridHybrid}
-        name="generateGridHybrid"
-      />
-      <RandomItemsAreasValidTest
-        columns={4}
-        func={generateGridHybrid}
-        name="generateGridHybrid"
-      />
-      <RandomItemsAreasValidTest
-        columns={8}
-        func={generateGridHybrid}
-        name="generateGridHybrid"
-      />
-      <RandomItemsAreasValidTest
-        columns={16}
-        func={generateGridHybrid}
-        name="generateGridHybrid"
-      />
+      {state.results.map((result) => {
+        return <RandomItemsAreasValidTest result={result} />;
+      })}
     </>
   );
 }
@@ -86,26 +70,11 @@ type Result = {
   total: number;
 };
 
-function RandomItemsAreasValidTest(props: {
-  columns: number;
-  func: (columns: number, items: Item[]) => { grid: Grid };
-  name: string;
-}) {
-  const { columns, func, name } = props;
-  const [result, setResult] = useState<null | Result>(null);
-  useState(() => {
-    setTimeout(() => {
-      startTransition(() => {
-        setResult(runTest(func, columns));
-      });
-    }, 0);
-    return () => {
-      setResult(null);
-    };
-  });
+function RandomItemsAreasValidTest(props: { result: Result }) {
+  const result = props.result;
   return (
     <div>
-      {name} {columns} columns areas valid:{" "}
+      {/* {name} {columns} columns areas valid:{" "} */}
       {result ? (
         <span
           style={{
