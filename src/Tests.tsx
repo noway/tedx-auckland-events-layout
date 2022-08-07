@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useReducer, useState } from "react";
+import { startTransition, useEffect, useReducer } from "react";
 import {
   generateItems,
   getAreas,
@@ -73,17 +73,30 @@ const testMatrix = [
   },
 ];
 
-const initialState = { reports: [] };
+type State = { reports: Record<number, Report[]>; runIds: number[] };
+
+const initialState: State = { reports: {}, runIds: [] };
 
 function reducer(
-  state: { reports: Report[] },
-  action: { type: "add_result"; report: Report } | { type: "clear_results" }
+  state: State,
+  action:
+    | { type: "add_result"; report: Report; runId: number }
+    | { type: "clear_results"; runId: number }
 ) {
+  const { runId } = action;
   switch (action.type) {
     case "add_result":
-      return { reports: [...state.reports, action.report] };
+      const reports = [...(state.reports[runId] ?? []), action.report];
+      const runIds1 = [...new Set([...state.runIds, runId])];
+      return {
+        reports: { ...state.reports, [runId]: reports },
+        runIds: runIds1,
+      };
     case "clear_results":
-      return { reports: [] };
+      const reportsCopy = { ...state.reports };
+      delete reportsCopy[runId];
+      const runIds2 = state.runIds.filter((id) => id !== runId);
+      return { reports: reportsCopy, runIds: runIds2 };
     default:
       throw new Error();
   }
@@ -92,22 +105,29 @@ function reducer(
 export default function Tests() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    testMatrix.forEach(({ columns, func, name }) => {
+  async function runTests(runId: number) {
+    for (const { columns, func, name } of testMatrix) {
       startTransition(() => {
         const result = runTest(func, columns);
         const report = { result, name };
-        // TODO: save "report"
-        dispatch({ type: "add_result", report });
+        dispatch({ type: "add_result", report, runId });
       });
-    });
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    }
+  }
+  useEffect(() => {
+    // TODO: add run/remove run actions
+    const runId = Date.now();
+    runTests(runId);
     return () => {
-      dispatch({ type: "clear_results" });
+      dispatch({ type: "clear_results", runId });
     };
   }, []);
+  const latestRunId = Math.max(...state.runIds);
+  const reports = state.reports[latestRunId] ?? [];
   return (
     <>
-      {state.reports.map((report) => {
+      {reports.map((report) => {
         return <RandomItemsAreasValidTest report={report} />;
       })}
     </>
