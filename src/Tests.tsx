@@ -81,22 +81,23 @@ function reducer(
   state: State,
   action:
     | { type: "add_result"; report: Report; runId: number }
-    | { type: "clear_results"; runId: number }
+    | { type: "end_run"; runId: number }
+    | { type: "start_run"; runId: number }
 ) {
   const { runId } = action;
   switch (action.type) {
+    case "start_run":
+      const runIds1 = [...new Set([...state.runIds, runId])];
+      return { ...state, runIds: runIds1 };
     case "add_result":
       const reports = [...(state.reports[runId] ?? []), action.report];
-      const runIds1 = [...new Set([...state.runIds, runId])];
       return {
+        ...state,
         reports: { ...state.reports, [runId]: reports },
-        runIds: runIds1,
       };
-    case "clear_results":
-      const reportsCopy = { ...state.reports };
-      delete reportsCopy[runId];
+    case "end_run":
       const runIds2 = state.runIds.filter((id) => id !== runId);
-      return { reports: reportsCopy, runIds: runIds2 };
+      return { ...state, runIds: runIds2 };
     default:
       throw new Error();
   }
@@ -116,11 +117,11 @@ export default function Tests() {
     }
   }
   useEffect(() => {
-    // TODO: add run/remove run actions
     const runId = Date.now();
+    dispatch({ type: "start_run", runId });
     runTests(runId);
     return () => {
-      dispatch({ type: "clear_results", runId });
+      dispatch({ type: "end_run", runId });
     };
   }, []);
   const latestRunId = Math.max(...state.runIds);
@@ -128,7 +129,7 @@ export default function Tests() {
   return (
     <>
       {reports.map((report) => {
-        return <RandomItemsAreasValidTest report={report} />;
+        return <RandomItemsAreasValidTest key={report.name} report={report} />;
       })}
     </>
   );
