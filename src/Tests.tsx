@@ -11,18 +11,66 @@ import {
 } from "./snakeGrid";
 
 const testMatrix = [
-  { columns: 2, func: generateGridSimple, name: "generateGridSimple" },
-  { columns: 4, func: generateGridSimple, name: "generateGridSimple" },
-  { columns: 8, func: generateGridSimple, name: "generateGridSimple" },
-  { columns: 16, func: generateGridSimple, name: "generateGridSimple" },
-  { columns: 2, func: generateGridRecursive, name: "generateGridRecursive" },
-  { columns: 4, func: generateGridRecursive, name: "generateGridRecursive" },
-  { columns: 8, func: generateGridRecursive, name: "generateGridRecursive" },
-  { columns: 16, func: generateGridRecursive, name: "generateGridRecursive" },
-  { columns: 2, func: generateGridHybrid, name: "generateGridHybrid" },
-  { columns: 4, func: generateGridHybrid, name: "generateGridHybrid" },
-  { columns: 8, func: generateGridHybrid, name: "generateGridHybrid" },
-  { columns: 16, func: generateGridHybrid, name: "generateGridHybrid" },
+  {
+    columns: 2,
+    func: generateGridSimple,
+    name: "generateGridSimple 2 columns areas",
+  },
+  {
+    columns: 4,
+    func: generateGridSimple,
+    name: "generateGridSimple 4 columns areas",
+  },
+  {
+    columns: 8,
+    func: generateGridSimple,
+    name: "generateGridSimple 8 columns areas",
+  },
+  {
+    columns: 16,
+    func: generateGridSimple,
+    name: "generateGridSimple 16 columns areas",
+  },
+  {
+    columns: 2,
+    func: generateGridRecursive,
+    name: "generateGridRecursive 2 columns areas",
+  },
+  {
+    columns: 4,
+    func: generateGridRecursive,
+    name: "generateGridRecursive 4 columns areas",
+  },
+  {
+    columns: 8,
+    func: generateGridRecursive,
+    name: "generateGridRecursive 8 columns areas",
+  },
+  {
+    columns: 16,
+    func: generateGridRecursive,
+    name: "generateGridRecursive 16 columns areas",
+  },
+  {
+    columns: 2,
+    func: generateGridHybrid,
+    name: "generateGridHybrid 2 columns areas",
+  },
+  {
+    columns: 4,
+    func: generateGridHybrid,
+    name: "generateGridHybrid 4 columns areas",
+  },
+  {
+    columns: 8,
+    func: generateGridHybrid,
+    name: "generateGridHybrid 8 columns areas",
+  },
+  {
+    columns: 16,
+    func: generateGridHybrid,
+    name: "generateGridHybrid 16 columns areas",
+  },
 ];
 
 const initialState = { reports: [] };
@@ -48,10 +96,7 @@ export default function Tests() {
     testMatrix.forEach(({ columns, func, name }) => {
       startTransition(() => {
         const result = runTest(func, columns);
-        const report = {
-          result,
-          name: `${name} ${columns} columns areas`,
-        };
+        const report = { result, name };
         // TODO: save "report"
         dispatch({ type: "add_result", report });
       });
