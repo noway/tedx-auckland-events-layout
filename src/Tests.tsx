@@ -25,17 +25,17 @@ const testMatrix = [
   { columns: 16, func: generateGridHybrid, name: "generateGridHybrid" },
 ];
 
-const initialState = { results: [] };
+const initialState = { reports: [] };
 
 function reducer(
-  state: { results: Result[] },
-  action: { type: "add_result"; result: Result } | { type: "clear_results" }
+  state: { reports: Report[] },
+  action: { type: "add_result"; report: Report } | { type: "clear_results" }
 ) {
   switch (action.type) {
     case "add_result":
-      return { results: [...state.results, action.result] };
+      return { reports: [...state.reports, action.report] };
     case "clear_results":
-      return { results: [] };
+      return { reports: [] };
     default:
       throw new Error();
   }
@@ -48,9 +48,13 @@ export default function Tests() {
     testMatrix.forEach(({ columns, func, name }) => {
       startTransition(() => {
         const result = runTest(func, columns);
+        const report = {
+          result,
+          name: `${name} ${columns} columns areas`,
+        };
         // TODO: save "report"
-        dispatch({ type: "add_result", result });  
-      })
+        dispatch({ type: "add_result", report });
+      });
     });
     return () => {
       dispatch({ type: "clear_results" });
@@ -58,8 +62,8 @@ export default function Tests() {
   }, []);
   return (
     <>
-      {state.results.map((result) => {
-        return <RandomItemsAreasValidTest result={result} />;
+      {state.reports.map((report) => {
+        return <RandomItemsAreasValidTest report={report} />;
       })}
     </>
   );
@@ -70,11 +74,17 @@ type Result = {
   total: number;
 };
 
-function RandomItemsAreasValidTest(props: { result: Result }) {
-  const result = props.result;
+type Report = {
+  result: Result;
+  name: string;
+};
+
+function RandomItemsAreasValidTest(props: { report: Report }) {
+  const result = props.report.result;
+  const name = props.report.name;
   return (
     <div>
-      {/* {name} {columns} columns areas valid:{" "} */}
+      {name}:{" "}
       {result ? (
         <span
           style={{
