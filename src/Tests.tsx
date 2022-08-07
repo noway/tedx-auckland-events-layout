@@ -1,3 +1,4 @@
+import { startTransition, useState } from "react";
 import {
   generateItems,
   getAreas,
@@ -80,15 +81,55 @@ export default function Tests() {
   );
 }
 
+type Result = {
+  validCount: number;
+  total: number;
+};
+
 function RandomItemsAreasValidTest(props: {
   columns: number;
   func: (columns: number, items: Item[]) => { grid: Grid };
   name: string;
 }) {
   const { columns, func, name } = props;
+  const [result, setResult] = useState<null | Result>(null);
+  useState(() => {
+    setTimeout(() => {
+      startTransition(() => {
+        setResult(runTest(func, columns));
+      });
+    }, 0);
+    return () => {
+      setResult(null);
+    };
+  });
+  return (
+    <div>
+      {name} {columns} columns areas valid:{" "}
+      {result ? (
+        <span
+          style={{
+            color: result.validCount === result.total ? "green" : "red",
+          }}
+        >
+          {result.validCount}/{result.total}{" "}
+          {result.validCount === result.total ? "OK" : "FAIL"}
+        </span>
+      ) : (
+        <span>Pending...</span>
+      )}
+    </div>
+  );
+}
+
+function runTest(
+  func: (columns: number, items: Item[]) => { grid: Grid },
+  columns: number
+) {
   const total = 256;
   const itemCount = 256;
   let validCount = 0;
+
   for (let i = 0; i < total; i++) {
     try {
       const items = generateItems(i, itemCount);
@@ -102,13 +143,5 @@ function RandomItemsAreasValidTest(props: {
       console.log("error", e);
     }
   }
-  const ok = validCount === total;
-  return (
-    <div>
-      {name} {columns} columns areas valid:{" "}
-      <span style={{ color: ok ? "green" : "red" }}>
-        {validCount}/{total} {ok ? "OK" : "FAIL"}
-      </span>
-    </div>
-  );
+  return { validCount, total };
 }
