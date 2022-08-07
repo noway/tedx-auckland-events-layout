@@ -10,7 +10,7 @@ import {
   generateGridHybrid,
 } from "./snakeGrid";
 
-const testMatrix = [
+const generateGridTestMatrix = [
   {
     columns: 2,
     func: generateGridSimple,
@@ -74,16 +74,14 @@ const testMatrix = [
 ];
 
 type State = { reports: Record<number, Report[]>; runIds: number[] };
+type Action =
+  | { type: "add_result"; report: Report; runId: number }
+  | { type: "end_run"; runId: number }
+  | { type: "start_run"; runId: number };
 
 const initialState: State = { reports: {}, runIds: [] };
 
-function reducer(
-  state: State,
-  action:
-    | { type: "add_result"; report: Report; runId: number }
-    | { type: "end_run"; runId: number }
-    | { type: "start_run"; runId: number }
-) {
+function reducer(state: State, action: Action) {
   const { runId } = action;
   switch (action.type) {
     case "start_run":
@@ -107,9 +105,9 @@ export default function Tests() {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   async function runTests(runId: number) {
-    for (const { columns, func, name } of testMatrix) {
+    for (const { columns, func, name } of generateGridTestMatrix) {
       startTransition(() => {
-        const result = runTest(func, columns);
+        const result = runGenerateGridTest(func, columns);
         const report = { result, name };
         dispatch({ type: "add_result", report, runId });
       });
@@ -129,7 +127,7 @@ export default function Tests() {
   return (
     <>
       {reports.map((report) => {
-        return <RandomItemsAreasValidTest key={report.name} report={report} />;
+        return <TestReport key={report.name} report={report} />;
       })}
     </>
   );
@@ -145,29 +143,24 @@ type Report = {
   name: string;
 };
 
-function RandomItemsAreasValidTest(props: { report: Report }) {
-  const result = props.report.result;
-  const name = props.report.name;
+function TestReport(props: { report: Report }) {
+  const { result, name } = props.report;
   return (
     <div>
       {name}:{" "}
-      {result ? (
-        <span
-          style={{
-            color: result.validCount === result.total ? "green" : "red",
-          }}
-        >
-          {result.validCount}/{result.total}{" "}
-          {result.validCount === result.total ? "OK" : "FAIL"}
-        </span>
-      ) : (
-        <span>Pending...</span>
-      )}
+      <span
+        style={{
+          color: result.validCount === result.total ? "green" : "red",
+        }}
+      >
+        {result.validCount}/{result.total}{" "}
+        {result.validCount === result.total ? "OK" : "FAIL"}
+      </span>
     </div>
   );
 }
 
-function runTest(
+function runGenerateGridTest(
   func: (columns: number, items: Item[]) => { grid: Grid },
   columns: number
 ) {
