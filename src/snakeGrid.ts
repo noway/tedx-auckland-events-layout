@@ -250,6 +250,7 @@ export function generateGridSimple(columns: number, items: Item[]) {
     return direction === "right" ? 1 : -1;
   }
 
+  let snakeProgressFilled = -1;
   for (const item of items) {
     if (item.isBig) {
       if (direction === "right") {
@@ -270,13 +271,16 @@ export function generateGridSimple(columns: number, items: Item[]) {
       grid[row][column + directionSign()] = item.id;
       grid[row + 1][column] = item.id;
       grid[row + 1][column + directionSign()] = item.id;
+      snakeProgressFilled = history.length
       goForward();
       goForward();
     } else {
       grid[row][column] = item.id;
+      snakeProgressFilled = history.length
       goForward();
     }
   }
+  history = history.slice(0, snakeProgressFilled);
 
   return { history, grid };
 }
