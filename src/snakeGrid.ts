@@ -180,11 +180,13 @@ export function generateGridRecursive(columns: number, items: Item[]) {
     history: [],
   };
 
+  let snakeProgressFilled = -1;
   for (const item of items) {
     if (item.isBig) {
       if (snakeProgress.direction === "right") {
         if (snakeProgress.column + 1 < columns) {
           snakeProgress = fillBigItem(grid, snakeProgress, item);
+          snakeProgressFilled = snakeProgress.history.length;
           snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
           console.error(
@@ -194,6 +196,7 @@ export function generateGridRecursive(columns: number, items: Item[]) {
       } else {
         if (snakeProgress.column - 1 >= 0) {
           snakeProgress = fillBigItem(grid, snakeProgress, item);
+          snakeProgressFilled = snakeProgress.history.length;
           snakeProgress = findEmptyCell(grid, snakeProgress);
         } else {
           console.error(
@@ -203,9 +206,12 @@ export function generateGridRecursive(columns: number, items: Item[]) {
       }
     } else {
       grid[snakeProgress.row][snakeProgress.column] = item.id;
+      snakeProgressFilled = snakeProgress.history.length;
       snakeProgress = findEmptyCell(grid, snakeProgress);
     }
   }
+
+  snakeProgress.history = snakeProgress.history.slice(0, snakeProgressFilled);
 
   return { history: snakeProgress.history, grid };
 }
