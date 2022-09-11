@@ -211,7 +211,9 @@ export function generateGridRecursive(columns: number, items: Item[]) {
     }
   }
 
-  snakeProgress.history = snakeProgress.history.slice(0, snakeProgressFilled);
+  if (snakeProgressFilled !== -1) {
+    snakeProgress.history = snakeProgress.history.slice(0, snakeProgressFilled);
+  }
 
   return { history: snakeProgress.history, grid };
 }
@@ -280,7 +282,9 @@ export function generateGridSimple(columns: number, items: Item[]) {
       goForward();
     }
   }
-  history = history.slice(0, snakeProgressFilled);
+  if (snakeProgressFilled !== -1) {
+    history = history.slice(0, snakeProgressFilled);
+  }
 
   return { history, grid };
 }
