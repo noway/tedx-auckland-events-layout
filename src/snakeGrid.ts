@@ -60,7 +60,7 @@ function findEmptyCell(
   do {
     iterations++;
     if (iterations > CIRCUIT_BREAKER_ITERATIONS) {
-      throw new Error("Could not find empty cell findEmptyCell");
+      throw new Error("Could not find empty cell in findEmptyCell");
     }
 
     let nextColumn = column;
@@ -162,7 +162,7 @@ function fillBigItem(
   ) {
     iterations++;
     if (iterations > CIRCUIT_BREAKER_ITERATIONS) {
-      throw new Error("Could not find empty cell fillBigItem");
+      throw new Error("Could not find empty cell in fillBigItem");
     }
 
     snakeProgress = findEmptyCell(grid, snakeProgress);
@@ -207,7 +207,7 @@ function fillSmallItem(
   ) {
     iterations++;
     if (iterations > CIRCUIT_BREAKER_ITERATIONS) {
-      throw new Error("Could not find empty cell fillSmallItem");
+      throw new Error("Could not find empty cell in fillSmallItem");
     }
 
     snakeProgress = findEmptyCell(grid, snakeProgress);
