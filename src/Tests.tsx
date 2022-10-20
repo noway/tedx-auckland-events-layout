@@ -12,9 +12,9 @@ import {
 
 const generateGridTestMatrix = [
   {
-    columns: 2,
+    columns: 3,
     func: generateGridSimple,
-    name: "generateGridSimple 2 columns areas",
+    name: "generateGridSimple 3 columns areas",
   },
   {
     columns: 4,
@@ -32,9 +32,9 @@ const generateGridTestMatrix = [
     name: "generateGridSimple 16 columns areas",
   },
   {
-    columns: 2,
+    columns: 3,
     func: generateGridRecursive,
-    name: "generateGridRecursive 2 columns areas",
+    name: "generateGridRecursive 3 columns areas",
   },
   {
     columns: 4,
@@ -52,9 +52,9 @@ const generateGridTestMatrix = [
     name: "generateGridRecursive 16 columns areas",
   },
   {
-    columns: 2,
+    columns: 3,
     func: generateGridHybrid,
-    name: "generateGridHybrid 2 columns areas",
+    name: "generateGridHybrid 3 columns areas",
   },
   {
     columns: 4,
