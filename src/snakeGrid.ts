@@ -182,7 +182,7 @@ function fillBigItem(
   return {
     ...snakeProgress,
     column: snakeProgress.column + directionSign() + directionSign(),
-    history: [...snakeProgress.history, snakeProgress.direction],
+    history: [...snakeProgress.history, snakeProgress.direction, snakeProgress.direction],
   };
 }
 
