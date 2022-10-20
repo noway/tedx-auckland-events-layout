@@ -43,8 +43,8 @@ export default function Demo() {
       />
       <input
         type="range"
-        min={2}
-        max={10}
+        min={3}
+        max={15}
         value={columns}
         onChange={(e) => setColumns(Number(e.target.value))}
       />
