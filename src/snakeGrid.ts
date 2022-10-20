@@ -1,6 +1,6 @@
 import { random } from "./prng";
 
-const CIRCUIT_BREAKER_ITERATIONS = 3;
+const CIRCUIT_BREAKER_ITERATIONS = 15;
 
 export interface Item {
   id: number;
