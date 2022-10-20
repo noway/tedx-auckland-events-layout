@@ -148,7 +148,17 @@ function fillBigItem(
   // if the adjacent cell is not empty, keep looking
   let iterations = 0;
   while (
-    grid[snakeProgress.row][snakeProgress.column + directionSign()] !== null
+    !(
+      grid[snakeProgress.row][snakeProgress.column] === null &&
+      grid[snakeProgress.row][snakeProgress.column + directionSign()] === null &&
+      grid[snakeProgress.row][snakeProgress.column + directionSign() + directionSign()] === null &&
+      grid[snakeProgress.row + 1][snakeProgress.column] === null &&
+      grid[snakeProgress.row + 1][snakeProgress.column + directionSign()] === null &&
+      grid[snakeProgress.row + 1][snakeProgress.column + directionSign() + directionSign()] === null &&
+      grid[snakeProgress.row + 2][snakeProgress.column] === null &&
+      grid[snakeProgress.row + 2][snakeProgress.column + directionSign()] === null &&
+      grid[snakeProgress.row + 2][snakeProgress.column + directionSign() + directionSign()] === null
+    )
   ) {
     iterations++;
     if (iterations > CIRCUIT_BREAKER_ITERATIONS) {
