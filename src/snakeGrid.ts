@@ -158,21 +158,26 @@ function fillBigItem(
     snakeProgress = findEmptyCell(grid, snakeProgress);
   }
 
-  // fill the 4 cells
+  // fill the 9 cells
   grid[snakeProgress.row][snakeProgress.column] = item.id;
   grid[snakeProgress.row][snakeProgress.column + directionSign()] = item.id;
+  grid[snakeProgress.row][snakeProgress.column + directionSign() + directionSign()] = item.id;
   grid[snakeProgress.row + 1][snakeProgress.column] = item.id;
   grid[snakeProgress.row + 1][snakeProgress.column + directionSign()] = item.id;
+  grid[snakeProgress.row + 1][snakeProgress.column + directionSign() + directionSign()] = item.id;
+  grid[snakeProgress.row + 2][snakeProgress.column] = item.id;
+  grid[snakeProgress.row + 2][snakeProgress.column + directionSign()] = item.id;
+  grid[snakeProgress.row + 2][snakeProgress.column + directionSign() + directionSign()] = item.id;
 
   return {
     ...snakeProgress,
-    column: snakeProgress.column + directionSign(),
+    column: snakeProgress.column + directionSign() + directionSign(),
     history: [...snakeProgress.history, snakeProgress.direction],
   };
 }
 
 export function generateGridRecursive(columns: number, items: Item[]) {
-  let grid: Grid = [...Array(2).keys()].map(() => Array(columns).fill(null));
+  let grid: Grid = [...Array(3).keys()].map(() => Array(columns).fill(null));
   let snakeProgress: SnakeProgress = {
     row: 0,
     column: 0,
