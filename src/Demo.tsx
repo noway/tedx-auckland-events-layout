@@ -29,7 +29,7 @@ export default function Demo() {
   const [count, setCount] = useState(16);
   const [seed, setSeed] = useState<number | null>(null);
   const items = seed ? generateItems(seed, count) : defaultItems;
-  const [recursiveAlgo, setRecursiveAlgo] = useState(false);
+  const [recursiveAlgo, setRecursiveAlgo] = useState(true);
 
   return (
     <div>
