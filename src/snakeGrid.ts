@@ -1,6 +1,6 @@
 import { random } from "./prng";
 
-const CIRCUIT_BREAKER_ITERATIONS = 4;
+const CIRCUIT_BREAKER_ITERATIONS = 5;
 
 export interface Item {
   id: number;
@@ -235,30 +235,15 @@ export function generateGridRecursive(columns: number, items: Item[]) {
   for (const item of items) {
     if (item.isBig) {
       if (snakeProgress.direction === "right") {
-        if (snakeProgress.column + 1 < columns) {
-          snakeProgress = fillBigItem(grid, snakeProgress, item);
-          snakeProgressFilled = snakeProgress.history.length;
-          snakeProgress = findEmptyCell(grid, snakeProgress);
-        } else {
-          console.error(
-            "This code path should not be hit - we avoid stopping on edges (right-to-left case)"
-          );
-        }
+        snakeProgress = fillBigItem(grid, snakeProgress, item);
+        snakeProgressFilled = snakeProgress.history.length;
       } else {
-        if (snakeProgress.column - 1 >= 0) {
-          snakeProgress = fillBigItem(grid, snakeProgress, item);
-          snakeProgressFilled = snakeProgress.history.length;
-          snakeProgress = findEmptyCell(grid, snakeProgress);
-        } else {
-          console.error(
-            "This code path should not be hit - we avoid stopping on edges (left-to-right case)"
-          );
-        }
+        snakeProgress = fillBigItem(grid, snakeProgress, item);
+        snakeProgressFilled = snakeProgress.history.length;
       }
     } else {
       snakeProgress = fillSmallItem(grid, snakeProgress, item)
       snakeProgressFilled = snakeProgress.history.length;
-      snakeProgress = findEmptyCell(grid, snakeProgress);
     }
   }
 
