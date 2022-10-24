@@ -41,11 +41,7 @@ function invertDirection(dir: Direction) {
 }
 
 function strip(grid: Grid) {
-  const lastRow = grid[grid.length - 1];
-  if (lastRow.every((cell) => cell === null)) {
-    return grid.slice(0, -1);
-  }
-  return grid;
+  return grid.filter(row => row.some(cell => cell !== null));
 }
 
 function findEmptyCell(
