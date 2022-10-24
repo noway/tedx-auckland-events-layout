@@ -261,12 +261,12 @@ export function generateGridSimple(columns: number, items: Item[]) {
   let direction: Direction = "right";
   let history: SnakeDirection[] = [];
 
-  function downAndInvert(column: number) {
+  function downAndInvert(col: number) {
     grid.push(Array(columns).fill(null));
     grid.push(Array(columns).fill(null));
     grid.push(Array(columns).fill(null));
     row += 3;
-    column = column;
+    column = col;
     direction = invertDirection(direction);
     history.push("down", "down", "down");
   }
