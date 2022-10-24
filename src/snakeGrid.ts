@@ -350,8 +350,6 @@ export function generateGridSimple(columns: number, items: Item[]) {
     history = history.slice(0, snakeProgressFilled);
   }
 
-  console.log('grid',grid)
-
   return { history, grid };
 }
 
