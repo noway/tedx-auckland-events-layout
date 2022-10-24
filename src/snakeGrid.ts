@@ -293,12 +293,14 @@ export function generateGridSimple(columns: number, items: Item[]) {
   for (const item of items) {
     if (item.isBig) {
       if (direction === "right") {
+        // gotta have 2 extra on the right
         if (column + 2 <= columns - 1) {
           // will be enough space to fill the big item
         } else {
           downAndInvert(columns - 1);
         }
       } else {
+        // gotta have 2 extra on the left
         if (column - 2 >= 0) {
           // will be enough space to fill the big item
         } else {
@@ -321,12 +323,14 @@ export function generateGridSimple(columns: number, items: Item[]) {
       goForward();
     } else {
       if (direction === "right") {
+        // gotta have 1 extra on the right
         if (column + 1 <= columns - 1) {
           // will be enough space to fill the big item
         } else {
           downAndInvert(columns - 1);
         }
       } else {
+        // gotta have 1 extra on the left
         if (column - 1 >= 0) {
           // will be enough space to fill the big item
         } else {
