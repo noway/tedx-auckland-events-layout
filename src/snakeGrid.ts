@@ -255,7 +255,7 @@ export function generateGridRecursive(columns: number, items: Item[]) {
 }
 
 export function generateGridSimple(columns: number, items: Item[]) {
-  let grid: Grid = [...Array(2).keys()].map(() => Array(columns).fill(null));
+  let grid: Grid = [...Array(3).keys()].map(() => Array(columns).fill(null));
   let row = 0;
   let column = 0;
   let direction: Direction = "right";
@@ -264,10 +264,11 @@ export function generateGridSimple(columns: number, items: Item[]) {
   function downAndInvert(column: number) {
     grid.push(Array(columns).fill(null));
     grid.push(Array(columns).fill(null));
-    row += 2;
+    grid.push(Array(columns).fill(null));
+    row += 3;
     column = column;
     direction = invertDirection(direction);
-    history.push("down", "down");
+    history.push("down", "down", "down");
   }
 
   function goForward() {
@@ -292,6 +293,34 @@ export function generateGridSimple(columns: number, items: Item[]) {
   for (const item of items) {
     if (item.isBig) {
       if (direction === "right") {
+        if (column + 2 <= columns - 1) {
+          // will be enough space to fill the big item
+        } else {
+          downAndInvert(columns - 1);
+        }
+      } else {
+        if (column - 2 >= 0) {
+          // will be enough space to fill the big item
+        } else {
+          downAndInvert(0);
+        }
+      }
+
+      grid[row][column] = item.id;
+      grid[row][column + directionSign()] = item.id;
+      grid[row][column + directionSign() + directionSign()] = item.id;
+      grid[row + 1][column] = item.id;
+      grid[row + 1][column + directionSign()] = item.id;
+      grid[row + 1][column + directionSign() + directionSign()] = item.id;
+      grid[row + 2][column] = item.id;
+      grid[row + 2][column + directionSign()] = item.id;
+      grid[row + 2][column + directionSign() + directionSign()] = item.id;
+      snakeProgressFilled = history.length
+      goForward();
+      goForward();
+      goForward();
+    } else {
+      if (direction === "right") {
         if (column + 1 <= columns - 1) {
           // will be enough space to fill the big item
         } else {
@@ -304,7 +333,6 @@ export function generateGridSimple(columns: number, items: Item[]) {
           downAndInvert(0);
         }
       }
-
       grid[row][column] = item.id;
       grid[row][column + directionSign()] = item.id;
       grid[row + 1][column] = item.id;
@@ -312,15 +340,13 @@ export function generateGridSimple(columns: number, items: Item[]) {
       snakeProgressFilled = history.length
       goForward();
       goForward();
-    } else {
-      grid[row][column] = item.id;
-      snakeProgressFilled = history.length
-      goForward();
     }
   }
   if (snakeProgressFilled !== -1) {
     history = history.slice(0, snakeProgressFilled);
   }
+
+  console.log('grid',grid)
 
   return { history, grid };
 }
